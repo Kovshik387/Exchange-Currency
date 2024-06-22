@@ -2,7 +2,7 @@
 using Serilog;
 using Serilog.Events;
 
-namespace Exchange.ExchangeValute.Configuration;
+namespace Exchange.ExchangeVolute.Configuration;
 
 /// <summary>
 /// Logger Configuration

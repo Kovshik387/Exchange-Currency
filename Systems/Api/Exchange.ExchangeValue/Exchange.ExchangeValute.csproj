@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Data\Exchange.Context\Exchange.Context.csproj" />
     <ProjectReference Include="..\..\..\Data\Exchange.Entities\Exchange.Entities.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Logger\Exchange.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />

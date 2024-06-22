@@ -2,7 +2,7 @@
 using Exchange.Exchange.ExchangeValute.Data;
 using System.Xml.Serialization;
 
-namespace Exchange.ExchangeValute.Data;
+namespace Exchange.ExchangeVolute.Data;
 
 [XmlRoot("ValCurs")]
 public class ValCurs
@@ -13,5 +13,5 @@ public class ValCurs
     [XmlAttribute("name")]
     public string Name { get; set; } = string.Empty;
     [XmlElement(ElementName = "Valute")]
-    public List<Valute> Valute { get; set; } = new List<Valute>();
+    public List<Valute> Volute { get; set; } = [];
 }

@@ -1,7 +1,7 @@
 ﻿using Exchange.Services.Settings;
 using Exchange.Services.Logger;
 
-namespace Exchange.ExchangeValute;
+namespace Exchange.ExchangeVolute;
 
 public static class Bootstrapper
 {

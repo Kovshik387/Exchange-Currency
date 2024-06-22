@@ -1,9 +1,9 @@
-﻿using Exchange.ExchangeValute.Data;
+﻿using Exchange.ExchangeVolute.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace Exchange.ExchangeValute.Controllers;
+namespace Exchange.ExchangeVolute.Controllers;
 [ApiController]
 public class ValuteController : ControllerBase
 {
@@ -24,7 +24,7 @@ public class ValuteController : ControllerBase
             using (StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("windows-1251")))
             {
                 ValCurs result = (ValCurs)serializer.Deserialize(reader)!;
-                return Ok(result.Valute.First().Value);
+                return Ok(result.Volute.First().Value);
             }
 
         }
