@@ -4,6 +4,7 @@ using Exchange.ExchangeVolute.Configuration;
 using Exchange.Services.Settings.SettingsConfigure;
 using Exchange.Context;
 using Exchange.Context.Setup;
+using Exchange.ExchangeValute.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddCors();
 builder.Services.RegisterServices();
+builder.Services.AddAppAutoMappers();
 
 var app = builder.Build();
 

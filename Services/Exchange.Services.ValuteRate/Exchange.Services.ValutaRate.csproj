@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Exchange.Context\Exchange.Context.csproj" />
+    <ProjectReference Include="..\..\Data\Exchange.Entities\Exchange.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

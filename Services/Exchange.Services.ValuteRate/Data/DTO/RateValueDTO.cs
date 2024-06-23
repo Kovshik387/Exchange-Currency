@@ -1,11 +1,9 @@
-﻿
-using Exchange.Exchange.ExchangeValute.Data;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-namespace Exchange.ExchangeVolute.Data;
+namespace Exchange.Services.ValutaRate.Data.DTO;
 
 [XmlRoot("ValCurs")]
-public class ValCurs
+public class RateValueDTO
 {
     [XmlAttribute("Date")]
     public string Date { get; set; } = string.Empty;
@@ -13,5 +11,5 @@ public class ValCurs
     [XmlAttribute("name")]
     public string Name { get; set; } = string.Empty;
     [XmlElement(ElementName = "Valute")]
-    public List<Valute> Volute { get; set; } = [];
+    public List<VoluteDTO> Volute { get; set; } = [];
 }

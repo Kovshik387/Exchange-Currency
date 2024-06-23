@@ -1,36 +1,40 @@
-﻿using Exchange.ExchangeVolute.Data;
+﻿using Exchange.Context.Context;
+using Exchange.Services.ValutaRate.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using System.Xml.Serialization;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Exchange.ExchangeVolute.Controllers;
 [ApiController]
-public class ValuteController : ControllerBase
+[Route("api")]
+public class ValuteController(IVoluteRateService voluteRateService) : ControllerBase
 {
-    [HttpGet("/get")]
-    public async Task<IActionResult> GetCurrentValue()
+    private readonly IVoluteRateService _voluteRateService = voluteRateService;
+    [HttpGet("/daily")]
+    public async Task<IActionResult> GetCurrentValue(string date)
     {
-        string url = "http://www.cbr.ru/scripts/XML_daily.asp";
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        try
+        if (DateOnly.TryParseExact(date,"dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate))
         {
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-
-            using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            XmlSerializer serializer = new XmlSerializer(typeof(ValCurs));
-
-            using (StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("windows-1251")))
-            {
-                ValCurs result = (ValCurs)serializer.Deserialize(reader)!;
-                return Ok(result.Volute.First().Value);
-            }
-
+            return Ok(await _voluteRateService.GetCursByDateAsync(parsedDate));
         }
-        catch (Exception ex)
+        else
         {
-            return BadRequest(ex.Message);
+            return BadRequest("Неправильный тип данных. Используйте 'dd.MM.yyyy'.");
+        }
+    }
+
+    [HttpGet("/dynamic")]
+    public async Task<IActionResult> GetDynamicValue(string date1, string date2, string name)
+    {
+        if (DateOnly.TryParseExact(date1, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate1) &&
+                        DateOnly.TryParseExact(date2, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate2))
+        {
+            var result = await _voluteRateService.GetCursListByDateAsync(parsedDate1, parsedDate2, name);
+            return Ok(result);
+        }
+        else
+        {
+            return BadRequest("Неправильный тип данных. Используйте 'dd.MM.yyyy'.");
         }
     }
 }

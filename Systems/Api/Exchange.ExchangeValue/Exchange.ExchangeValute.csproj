@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -16,8 +20,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\Exchange.Context\Exchange.Context.csproj" />
     <ProjectReference Include="..\..\..\Data\Exchange.Entities\Exchange.Entities.csproj" />
+    <ProjectReference Include="..\..\..\Data\Migrations\Exchange.Migrations.PgSql\Exchange.Context.Migrations.PgSql.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Logger\Exchange.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
+    <ProjectReference Include="..\..\..\Services\Exchange.Services.ValuteRate\Exchange.Services.ValutaRate.csproj" />
     <ProjectReference Include="..\..\..\Shared\Exchange.Common\Exchange.Common.csproj" />
   </ItemGroup>
 

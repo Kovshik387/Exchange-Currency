@@ -1,5 +1,6 @@
 ﻿using Exchange.Services.Settings;
 using Exchange.Services.Logger;
+using Exchange.Services.ValutaRate;
 
 namespace Exchange.ExchangeVolute;
 
@@ -10,6 +11,7 @@ public static class Bootstrapper
         services.AddMainSettings()
             .AddLogSettings()
             .AddAppLogger()
+            .AddValuteService()
             ;
 
         return services;

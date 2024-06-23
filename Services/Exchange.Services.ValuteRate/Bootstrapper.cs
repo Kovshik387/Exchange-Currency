@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Exchange.Services.ValutaRate.Infrastructure;
+using Exchange.Services.ValutaRate.Services;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Exchange.Services.ValutaRate
 {
-    public class Bootstrapper
+    /// <summary>
+    /// Регистрация сервиса манипуляций с данными курсов валют
+    /// </summary>
+    public static class Bootstrapper
     {
-
+        public static IServiceCollection AddValuteService(this IServiceCollection services)
+        {
+            return services.AddTransient<IVoluteRateService, VoluteRateService>();
+        }
     }
 }
