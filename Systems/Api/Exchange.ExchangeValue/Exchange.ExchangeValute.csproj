@@ -6,12 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-	<ItemGroup>
-		<Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
-	</ItemGroup>
-	
   <ItemGroup>
-    <PackageReference Include="Grpc.Core.Api" Version="2.63.0" />
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.40.0" PrivateAssets="All" />
+	  <PackageReference Include="Google.Protobuf" Version="3.19.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Protos\" />
+	  <Protobuf  Include="Protos\exchange.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>
