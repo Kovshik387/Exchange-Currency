@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.40.0" PrivateAssets="All" />
+	  <PackageReference Include="Google.Protobuf" Version="3.19.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,6 +28,10 @@
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.ValuteRate\Exchange.Services.ValutaRate.csproj" />
     <ProjectReference Include="..\..\..\Shared\Exchange.Common\Exchange.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <Protobuf  Include="Protos\exchange.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

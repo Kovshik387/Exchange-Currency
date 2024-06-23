@@ -11,7 +11,7 @@ public class ValuteController(IVoluteRateService voluteRateService) : Controller
 {
     private readonly IVoluteRateService _voluteRateService = voluteRateService;
     [HttpGet("/daily")]
-    public async Task<IActionResult> GetCurrentValue(string date)
+    public async Task<IActionResult> GetCurrentValue(string? date)
     {
         if (DateOnly.TryParseExact(date,"dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate))
         {

@@ -20,18 +20,25 @@ namespace Exchange.Services.ValutaRate.Services;
 /// <param name="logger"></param>
 public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<VoluteRateService> logger) : IVoluteRateService
 {
-    private readonly string urlDaily = "http://www.cbr.ru/scripts/XM1L_daily.asp";
-    private readonly string urlInterval = "http://www.cbr.ru/scripts/XM1L_dynamic.asp";
+    private readonly string urlDaily = "http://www.cbr.ru/scripts/XML_daily.asp";
+    private readonly string urlInterval = "http://www.cbr.ru/scripts/XML_dynamic.asp";
     private readonly RateDbContext _context = context;
     private readonly IMapper _mapper = mapper;
     private readonly ILogger<VoluteRateService> _logger = logger;
 
     public async Task<RateValueDTO?> GetCursByDateAsync(DateOnly? date = null)
     {
-        DateOnly? dateSearch = DateOnly.FromDateTime(DateTime.UtcNow);
-        if (!date.Equals(DateOnly.MinValue)) { dateSearch = date; }
+        var dataNow = DateOnly.FromDateTime(DateTime.UtcNow);
+        
+        if (date > dataNow) return null;
 
-        var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(date));
+        DateOnly dateSearch = date ?? dataNow;
+
+        if (DateTime.UtcNow.Hour > 15 && date.Equals(dataNow)) dateSearch = dateSearch.AddDays(-1);
+
+
+        var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(dateSearch));
+        
         if (data is null)
         {
             var result = await GetValuteDataFromApiSingleAsync(
@@ -106,7 +113,8 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
         using HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.GetAsync(url);
 
-        if (!response.IsSuccessStatusCode) throw new ApiUnavailableException(response.StatusCode.ToString(), $"Api CBR не доступно");
+        if (!response.IsSuccessStatusCode) throw 
+                new ApiUnavailableException(response.StatusCode.ToString(), $"Api CBR не доступно");
 
         try
         {
