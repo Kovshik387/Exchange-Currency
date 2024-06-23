@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Exchange.ExchangeVolute";
+
+package exchange;
+
+message DailyValuteRequest {
+	string date = 1;
+}
+
+message DailyValuteResponse {
+
+}
+
+service Valute {
+	rpc GetCurrentValue (DailyValuteRequest) return (DailyValuteResponse);
+}
