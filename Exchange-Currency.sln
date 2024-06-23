@@ -33,7 +33,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rate", "Rate", "{132C4CF5-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{CDD1A912-5180-4EEE-9081-2D2C9D881EA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.Context.Migrations.PgSql", "Data\Migrations\Exchange.Migrations.PgSql\Exchange.Context.Migrations.PgSql.csproj", "{0EA3BFDF-7CF5-4B28-910C-D75A92F19EB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Context.Migrations.PgSql", "Data\Migrations\Exchange.Migrations.PgSql\Exchange.Context.Migrations.PgSql.csproj", "{0EA3BFDF-7CF5-4B28-910C-D75A92F19EB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{4FCF62F4-7FF2-417E-81DF-9ABF6D0E3264}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yaml = docker-compose.yaml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.ExchangeCache", "Systems\Api\Exchange.ExchangeCache\Exchange.ExchangeCache.csproj", "{92583C30-CE97-4926-865F-7CE9D2FD412D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +84,10 @@ Global
 		{0EA3BFDF-7CF5-4B28-910C-D75A92F19EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EA3BFDF-7CF5-4B28-910C-D75A92F19EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EA3BFDF-7CF5-4B28-910C-D75A92F19EB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92583C30-CE97-4926-865F-7CE9D2FD412D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92583C30-CE97-4926-865F-7CE9D2FD412D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92583C30-CE97-4926-865F-7CE9D2FD412D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92583C30-CE97-4926-865F-7CE9D2FD412D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +105,7 @@ Global
 		{132C4CF5-B9CF-4295-9C4A-9D78A7A72F8F} = {5A48BBE6-3A85-4C65-9077-5C7AD1C65ED5}
 		{CDD1A912-5180-4EEE-9081-2D2C9D881EA7} = {132C4CF5-B9CF-4295-9C4A-9D78A7A72F8F}
 		{0EA3BFDF-7CF5-4B28-910C-D75A92F19EB4} = {CDD1A912-5180-4EEE-9081-2D2C9D881EA7}
+		{92583C30-CE97-4926-865F-7CE9D2FD412D} = {23018298-DD9D-4C61-AFFC-34AB4A7C57E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB24B7B9-B505-47C8-AB41-C98FA9CC9E5E}

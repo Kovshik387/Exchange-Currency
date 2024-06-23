@@ -1,7 +1,5 @@
-﻿using Exchange.Context.Context;
-using Exchange.Services.ValutaRate.Infrastructure;
+﻿using Exchange.Services.ValutaRate.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace Exchange.ExchangeVolute.Controllers;
