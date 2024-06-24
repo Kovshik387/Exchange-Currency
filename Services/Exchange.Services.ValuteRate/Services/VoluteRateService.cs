@@ -8,6 +8,7 @@ using Exchange.Services.ValutaRate.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -47,7 +48,11 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
 
             if (result is null) return result;
 
-            await _context.RateValues.AddAsync(_mapper.Map<RateValue>(result)); await _context.SaveChangesAsync();
+            var record = _mapper.Map<RateValue>(result);
+
+            if (await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(record.Date)) is not null) return result;
+
+            await _context.RateValues.AddAsync(record); await _context.SaveChangesAsync();
 
             _logger.LogInformation("Запись данных в бд");
             return result;
@@ -62,51 +67,134 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
 
     public async Task<IList<RecordDTO>> GetCursListByDateAsync(DateOnly date1, DateOnly date2, string nameVal)
     {
-        var result = await GetValuteDataFromApiAsync($"{urlInterval}?date_req1={date1}&date_req2={date2}&VAL_NM_RQ={nameVal}");
+        var existingRecords = await _context.Volutes
+            .Where(v => v.Idname.Equals(nameVal) && v.Valcurs.Date >= date1 && v.Valcurs.Date <= date2)
+            .ToListAsync();
 
-        if (result == null) return null;
+        var existingDates = existingRecords.Select(v => v.Valcurs.Date).ToList();
+        var allDates = Enumerable.Range(0, date2.DayNumber - date1.DayNumber + 1)
+                                 .Select(offset => date1.AddDays(offset))
+                                 .ToList();
+        
+        var missingDates = allDates.Except(existingDates).ToList();
 
+        var result = new List<RecordDTO>();
+        
         var dataFill = await _context.Volutes.FirstOrDefaultAsync(x => x.Idname.Equals(nameVal));
 
-        if (dataFill is null) return null;
-
-        foreach (var record in result.Records)
+        if (missingDates.Count != 0)
         {
-            var recordDate = DateOnly.Parse(record.Date);
-
-            if (!_context.Volutes.Any(v => v.Idname.Equals(record.Id) && v.Valcurs.Date.Equals(recordDate)))
+            var missingDateRanges = SplitDatesIntoRanges(missingDates);
+            
+            foreach (var dateRange in missingDateRanges)
             {
-                var rateValue = _context.RateValues.FirstOrDefault(rv => rv.Date == recordDate);
+                var apiResult = await GetValuteDataFromApiAsync($"{urlInterval}?date_req1={dateRange.Item1}&" +
+                    $"date_req2={dateRange.Item2}&VAL_NM_RQ={nameVal}");
+                _logger.LogInformation($"Запрос недостающих дат: {dateRange.Item1}\t|\t{dateRange.Item2}");
 
-                if (rateValue == null)
+                if (apiResult == null || apiResult.Records.Count == 0)
                 {
-                    rateValue = new RateValue
+                    foreach (var date in missingDates.Where(d => d >= dateRange.Item1 && d <= dateRange.Item2))
                     {
-                        Date = recordDate,
-                        Name = result.Name
-                    };
-                    _context.RateValues.Add(rateValue);
-                    await _context.SaveChangesAsync();
+                        await AddEmptyData(date, nameVal);
+                    }
+                    continue;
                 }
 
-                var volute = new Volute
+
+                foreach (var item in apiResult.Records)
                 {
-                    Idname = record.Id,
-                    Nominal = record.Nominal,
-                    Value = record.Value,
-                    Vunitrate = record.VunitRate,
-                    Valcurs = rateValue,
-                    Charcode = dataFill!.Charcode,
-                    Name = dataFill.Name,
-                    Numcode = dataFill.Numcode,
-                };
-                _context.Volutes.Add(volute);
+                    var recordDate = DateOnly.Parse(item.Date);
+                    result.Add(item);
+
+                    if (!existingDates.Contains(recordDate))
+                    {
+                        var rateValue = await _context.RateValues.FirstOrDefaultAsync(rv => rv.Date == recordDate);
+                        if (rateValue == null)
+                        {
+                            rateValue = new RateValue
+                            {
+                                Date = recordDate,
+                                Name = apiResult.Name
+                            };
+                            _context.RateValues.Add(rateValue);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        var volute = new Volute
+                        {
+                            Idname = item.Id,
+                            Nominal = item.Nominal,
+                            Value = item.Value,
+                            Vunitrate = item.VunitRate,
+                            Valcurs = rateValue,
+                            Charcode = dataFill!.Charcode,
+                            Name = dataFill.Name,
+                            Numcode = dataFill.Numcode,
+                        };
+                        _context.Volutes.Add(volute);
+                    }
+                    var apiDates = apiResult.Records.Select(r => DateOnly.Parse(r.Date)).ToList();
+                    var missingApiDates = missingDates
+                        .Where(d => d >= dateRange.Item1 && d <= dateRange.Item2 && !apiDates.Contains(d))
+                        .ToList();
+
+                    foreach (var missingDate in missingApiDates)
+                    {
+                       await AddEmptyData(missingDate, nameVal);
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            _logger.LogInformation("Данные из бд");
+        }
+
+        var combinedResult = existingRecords.Select(x => new RecordDTO
+        {
+            Date = x.Valcurs.Date.ToString("dd.MM.yyyy"),
+            Id = x.Idname,
+            Nominal = x.Nominal,
+            Value = x.Value,
+            VunitRate = x.Vunitrate,
+        }).ToList();
+
+        combinedResult.AddRange(result);
+
+        return combinedResult;
+    }
+
+    private List<(DateOnly, DateOnly)> SplitDatesIntoRanges(List<DateOnly> dates)
+    {
+        var ranges = new List<(DateOnly, DateOnly)>();
+        
+        if (!dates.Any()) return ranges;
+
+        dates.Sort();
+
+        var startDate = dates.First();
+        var endDate = startDate;
+
+        foreach (var date in dates.Skip(1))
+        {
+            if (date.DayNumber == endDate.DayNumber + 1)
+            {
+                endDate = date;
+            }
+            else
+            {
+                ranges.Add((startDate, endDate));
+                startDate = date;
+                endDate = startDate;
             }
         }
-        await _context.SaveChangesAsync();
-        return result.Records;
+
+        ranges.Add((startDate, endDate));
+        return ranges;
     }
-        
+
     private async Task<RatesValueDTO?> GetValuteDataFromApiAsync(string url)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -158,5 +246,32 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
             _logger.LogError(ex.Message);
             return null;
         }
+    }
+
+    private async Task AddEmptyData(DateOnly date, string nameVal)
+    {
+        var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date == date)
+                ?? new RateValue { Date = date, Name = "No data" };
+
+        if (data.Id == 0)
+        {
+            _context.RateValues.Add(data);
+            await _context.SaveChangesAsync();
+        }
+
+        var voluteStub = new Volute
+        {
+            Idname = nameVal,
+            Nominal = 0,
+            Value = 0,
+            Vunitrate = 0,
+            Valcurs = data,
+            Charcode = "No data",
+            Name = "No data",
+            Numcode = 0,
+        };
+
+        _context.Volutes.Add(voluteStub);
+        await _context.SaveChangesAsync();
     }
 }
