@@ -30,20 +30,13 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
     public async Task<RateValueDTO?> GetCursByDateAsync(DateOnly? date = null)
     {
         var dataNow = DateOnly.FromDateTime(DateTime.UtcNow);
-        
-        if (date > dataNow) return null;
 
-        DateOnly dateSearch = date ?? dataNow;
-
-        if (DateTime.UtcNow.Hour > 15 && date.Equals(dataNow)) dateSearch = dateSearch.AddDays(-1);
-
-
-        var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(dateSearch));
+        var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(date));
         
         if (data is null)
         {
             var result = await GetValuteDataFromApiSingleAsync(
-                date is null ? this.urlDaily : urlDaily + "?date_req=" + dateSearch.ToString()!.Replace(".","/")
+                date is null ? this.urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".","/")
             );
 
             if (result is null) return result;
@@ -71,21 +64,22 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
             .Where(v => v.Idname.Equals(nameVal) && v.Valcurs.Date >= date1 && v.Valcurs.Date <= date2)
             .ToListAsync();
 
-        var existingDates = existingRecords.Select(v => v.Valcurs.Date).ToList();
+        var existingDates = existingRecords.Select(v => v.Valcurs.Date).ToHashSet(); 
+
         var allDates = Enumerable.Range(0, date2.DayNumber - date1.DayNumber + 1)
                                  .Select(offset => date1.AddDays(offset))
                                  .ToList();
-        
+
         var missingDates = allDates.Except(existingDates).ToList();
 
         var result = new List<RecordDTO>();
-        
+
         var dataFill = await _context.Volutes.FirstOrDefaultAsync(x => x.Idname.Equals(nameVal));
 
         if (missingDates.Count != 0)
         {
             var missingDateRanges = SplitDatesIntoRanges(missingDates);
-            
+
             foreach (var dateRange in missingDateRanges)
             {
                 var apiResult = await GetValuteDataFromApiAsync($"{urlInterval}?date_req1={dateRange.Item1}&" +
@@ -100,7 +94,6 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
                     }
                     continue;
                 }
-
 
                 foreach (var item in apiResult.Records)
                 {
@@ -133,16 +126,19 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
                             Numcode = dataFill.Numcode,
                         };
                         _context.Volutes.Add(volute);
+                        
+                        continue;
                     }
-                    var apiDates = apiResult.Records.Select(r => DateOnly.Parse(r.Date)).ToList();
-                    var missingApiDates = missingDates
-                        .Where(d => d >= dateRange.Item1 && d <= dateRange.Item2 && !apiDates.Contains(d))
-                        .ToList();
 
-                    foreach (var missingDate in missingApiDates)
-                    {
-                       await AddEmptyData(missingDate, nameVal);
-                    }
+                }
+                var apiDates = apiResult.Records.Select(r => DateOnly.Parse(r.Date)).ToHashSet();
+                var missingApiDates = missingDates
+                    .Where(d => d >= dateRange.Item1 && d <= dateRange.Item2 && !apiDates.Contains(d))
+                    .ToList();
+
+                foreach (var missingDate in missingApiDates)
+                {
+                    await AddEmptyData(missingDate, nameVal);
                 }
             }
             await _context.SaveChangesAsync();
@@ -152,7 +148,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
             _logger.LogInformation("Данные из бд");
         }
 
-        var combinedResult = existingRecords.Select(x => new RecordDTO
+        var combinedResult = existingRecords.Where(x => x.Valcurs.Name != "No data").Select(x => new RecordDTO
         {
             Date = x.Valcurs.Date.ToString("dd.MM.yyyy"),
             Id = x.Idname,
@@ -163,7 +159,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
 
         combinedResult.AddRange(result);
 
-        return combinedResult;
+        return [.. combinedResult.OrderBy(x => DateOnly.Parse(x.Date))];
     }
 
     private List<(DateOnly, DateOnly)> SplitDatesIntoRanges(List<DateOnly> dates)
