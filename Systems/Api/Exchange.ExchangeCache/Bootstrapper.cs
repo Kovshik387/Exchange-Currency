@@ -9,6 +9,7 @@ public static class Bootstrapper
     {
         return services
             .AddApiPathsSettings()
-            .AddCacheService();
+            .AddCacheService()
+            .AddReddisSettings();
     }
 }

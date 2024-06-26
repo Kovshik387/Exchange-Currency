@@ -10,6 +10,7 @@ namespace Exchange.Services.Settings.SettingsConfigure
     {
         public string Configuration { get; set; } = default!;
         public string InstanseName { get; set; } = default!;
-
+        public double CacheSmallData { get; set; } = default!;
+        public double CacheLargeData { get; set;} = default!;
     }
 }

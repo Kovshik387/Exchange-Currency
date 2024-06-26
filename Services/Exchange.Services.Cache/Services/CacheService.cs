@@ -10,12 +10,13 @@ using Newtonsoft.Json.Serialization;
 
 namespace Exchange.Services.Cache.Services;
 
-public class CacheService(IDistributedCache distributedCache,
+public class CacheService(IDistributedCache distributedCache, RedisSettings redisSettings,
     ApiEndPointSettings pointSettings, ILogger<CacheService> logger) : ICacheService
 {
     private readonly IDistributedCache _cache = distributedCache;
     private readonly ApiEndPointSettings _pointSettings = pointSettings;
     private readonly ILogger<CacheService> _logger = logger;
+    private readonly RedisSettings _redisSettings = redisSettings;
     public async Task<ExchangeCacheService.DailyValuteResponse?> GetDataByDateAsync(string date)
     {
         ExchangeCacheService.DailyValuteResponse? result = null;
@@ -44,7 +45,7 @@ public class CacheService(IDistributedCache distributedCache,
 
             await _cache.SetStringAsync(date, serializedResult, new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(30)
+                SlidingExpiration = TimeSpan.FromMinutes(_redisSettings.CacheSmallData)
             });
 
             _logger.LogInformation("Data from database");
@@ -82,7 +83,7 @@ public class CacheService(IDistributedCache distributedCache,
 
             await _cache.SetStringAsync(searchSting, serializedResult, new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(20)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_redisSettings.CacheLargeData)
             });
 
             _logger.LogInformation("Data from database");
