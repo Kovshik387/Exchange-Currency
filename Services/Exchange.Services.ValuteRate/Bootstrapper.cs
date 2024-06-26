@@ -3,16 +3,15 @@ using Exchange.Services.ValutaRate.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace Exchange.Services.ValutaRate
+namespace Exchange.Services.ValutaRate;
+
+/// <summary>
+/// Регистрация сервиса манипуляций с данными курсов валют
+/// </summary>
+public static class Bootstrapper
 {
-    /// <summary>
-    /// Регистрация сервиса манипуляций с данными курсов валют
-    /// </summary>
-    public static class Bootstrapper
+    public static IServiceCollection AddValuteService(this IServiceCollection services)
     {
-        public static IServiceCollection AddValuteService(this IServiceCollection services)
-        {
-            return services.AddTransient<IVoluteRateService, VoluteRateService>();
-        }
+        return services.AddTransient<IVoluteRateService, VoluteRateService>();
     }
 }

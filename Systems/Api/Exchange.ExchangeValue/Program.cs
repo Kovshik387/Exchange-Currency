@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var mainSettings = Settings.Load<MainSettings>("Main");
 var logSettings = Settings.Load<LogSettings>("Log");
+var swaggerSettings = Settings.Load<SwaggerSettings>("Swagger");
 
 builder.AddAppLogger(mainSettings, logSettings);
 
@@ -18,19 +19,17 @@ builder.Services.AddAppDbContext(builder.Configuration);
 builder.Services.AddGrpc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen().AddCors();
 builder.Services.RegisterServices();
 builder.Services.AddAppAutoMappers();
-
+builder.Services.AddAppSwagger(swaggerSettings);
+builder.Services.AddAppCors();
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseAppSwagger();
 
 app.MapGrpcService<ValuteService>();
-app.UseCors();
+app.UseAppCors();
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 DbInitializer.Execute(app.Services);

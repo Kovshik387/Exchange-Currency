@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using Exchange.Entities;
 using Exchange.Services.ValutaRate.Data.DTO;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Exchange.Services.ValutaRate.Data.Mapper;
 

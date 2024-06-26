@@ -29,14 +29,12 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
 
     public async Task<RateValueDTO?> GetCursByDateAsync(DateOnly? date = null)
     {
-        var dataNow = DateOnly.FromDateTime(DateTime.UtcNow);
-
+        _logger.LogInformation("Date:\t" + date);
         var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(date));
-        
         if (data is null)
         {
             var result = await GetValuteDataFromApiSingleAsync(
-                date is null ? this.urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".","/")
+                date is null ? urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".","/")
             );
 
             if (result is null) return result;
@@ -74,7 +72,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
 
         var result = new List<RecordDTO>();
 
-        var dataFill = await _context.Volutes.FirstOrDefaultAsync(x => x.Idname.Equals(nameVal));
+        var voluteTemplate = await _context.Volutes.FirstOrDefaultAsync(x => x.Idname.Equals(nameVal));
 
         if (missingDates.Count != 0)
         {
@@ -121,9 +119,9 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
                             Value = item.Value,
                             Vunitrate = item.VunitRate,
                             Valcurs = rateValue,
-                            Charcode = dataFill!.Charcode,
-                            Name = dataFill.Name,
-                            Numcode = dataFill.Numcode,
+                            Charcode = voluteTemplate!.Charcode,
+                            Name = voluteTemplate.Name,
+                            Numcode = voluteTemplate.Numcode,
                         };
                         _context.Volutes.Add(volute);
                         
@@ -194,7 +192,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
     private async Task<RatesValueDTO?> GetValuteDataFromApiAsync(string url)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        using HttpClient client = new HttpClient();
+        using HttpClient client = new();
         HttpResponseMessage response = await client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode) throw 

@@ -9,20 +9,25 @@ using Exchange.Services.ValutaRate.Data.DTO;
 
 namespace Exchange.ExchangeValute.Services;
 
-public class ValuteService(IVoluteRateService voluteRateService, IMapper mapper) : Volute.VoluteBase
+public class ValuteService(IVoluteRateService voluteRateService, IMapper mapper, ILogger<ValuteService> logger) : Volute.VoluteBase
 {
     private readonly IVoluteRateService _voluteRateService = voluteRateService;
     private readonly IMapper _mapper = mapper;
+    private readonly ILogger _logger = logger;
     public override async Task<DailyValuteResponse> GetCurrentValue(DailyValuteRequest request, ServerCallContext context)
     {
-        DateOnly.TryParseExact(request.Date, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate);
-        return _mapper.Map<DailyValuteResponse>(await _voluteRateService.GetCursByDateAsync(parsedDate));
+        if (DateOnly.TryParseExact(request.Date, "dd.MM.yyyy", CultureInfo.GetCultureInfo("ru-RU"), DateTimeStyles.None, out DateOnly parsedDate))
+        {
+            _logger.LogInformation($"Date: {request.Date}|\tParsed Date: {parsedDate}");
+            return _mapper.Map<DailyValuteResponse>(await _voluteRateService.GetCursByDateAsync(parsedDate));
+        }
+        else return null;
     }
 
     public override async Task<DynamicValueResponse> GetDynamicValue(DynamicValueRequest request, ServerCallContext context)
     {
-        DateOnly.TryParseExact(request.Date1, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate1);
-        DateOnly.TryParseExact(request.Date2, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate2);
+        DateOnly.TryParseExact(request.Date1, "dd.MM.yyyy", CultureInfo.GetCultureInfo("ru-RU"), DateTimeStyles.None, out DateOnly parsedDate1);
+        DateOnly.TryParseExact(request.Date2, "dd.MM.yyyy", CultureInfo.GetCultureInfo("ru-RU"), DateTimeStyles.None, out DateOnly parsedDate2);
         
         var records = await _voluteRateService.GetCursListByDateAsync(parsedDate1, parsedDate2, request.Name);
         
