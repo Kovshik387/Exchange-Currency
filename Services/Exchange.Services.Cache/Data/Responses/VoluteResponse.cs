@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exchange.Services.Cache.Services
+namespace Exchange.Services.ValutaRate.Data.Responses
 {
-    public class CacheService
+    public class VoluteResponse
     {
 
     }

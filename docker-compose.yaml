@@ -6,3 +6,64 @@ networks:
   exchange-dev:
     driver: bridge
 
+services:
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_NAME: 'postgres'
+      POSTGRES_PASSWORD: '123'
+      POSTGRES_DB: 'rate_db'
+    ports:
+      - "5433:5432"
+    networks:
+      - exchange-dev
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server","--appendonly","yes"]
+    networks:
+      - exchange-dev
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    volumes:
+      - redis-data:/var/lib/redis/data
+
+  valute_service:
+    image: ${DOCKER_REGISTRY-}exchange-valute
+    container_name: exchange-valute
+    build:
+        context: .
+        dockerfile: /Systems/Api/Exchange.ExchangeValue/Dockerfile
+    networks:
+        - exchange-dev
+    ports:
+       - "8010:8080"
+    depends_on:
+       - postgres_db
+  
+  cache_service:
+    image: ${DOCKER_REGISTRY-}exchange-cache
+    container_name: exchange-cache
+    build:
+        context: .
+        dockerfile: /Systems/Api/Exchange.ExchangeCache/Dockerfile
+    networks:
+        - exchange-dev
+    ports:
+        - "8020:8080"
+    depends_on:
+       - redis
+
+volumes:
+  postgres-data:
+  redis-data:  

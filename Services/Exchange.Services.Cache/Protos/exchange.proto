@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option csharp_namespace = "ExchangeCacheService";
+
+package exchange;
+
+message DailyValuteRequest {
+	string date = 1;
+}
+
+message DailyValuteResponse {
+	string date = 1;
+    string name = 2;
+    repeated VoluteResponse volute = 3;
+}
+
+message VoluteResponse {
+    string id = 1;
+    int32 numCode = 2;
+    string charCode = 3;
+    int32 nominal = 4;
+    string name = 5;
+    double value = 6;
+    double vunitRate = 7;
+}
+
+message DynamicValueRequest{
+    string date1 = 1;
+    string date2 = 2; 
+    string name = 3;
+}
+
+message RecordResponse {
+    string date = 1;
+    string id = 2;
+    int32 nominal = 3;
+    double value = 4;
+    double vunitRate = 5;
+}
+
+message DynamicValueResponse{
+    repeated RecordResponse record = 1;
+}
+
+service Volute {
+	rpc GetCurrentValue (DailyValuteRequest) returns (DailyValuteResponse);
+    rpc GetDynamicValue (DynamicValueRequest) returns (DynamicValueResponse);
+}

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+	<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.40.0" PrivateAssets="All" />
+	<PackageReference Include="Google.Protobuf" Version="3.19.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="Protos\exchange.proto" GrpcServices="Client" />
+	</ItemGroup>
+
+</Project>

@@ -4,11 +4,15 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
+EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Systems/Api/Exchange.ExchangeCache/Exchange.ExchangeCache.csproj", "Systems/Api/Exchange.ExchangeCache/"]
+COPY ["Services/Exchange.Services.Cache/Exchange.Services.Cache.csproj", "Services/Exchange.Services.Cache/"]
+COPY ["Services/Exchange.Services.Settings/Exchange.Services.Settings.csproj", "Services/Exchange.Services.Settings/"]
+COPY ["Shared/Exchange.Common/Exchange.Common.csproj", "Shared/Exchange.Common/"]
 RUN dotnet restore "./Systems/Api/Exchange.ExchangeCache/Exchange.ExchangeCache.csproj"
 COPY . .
 WORKDIR "/src/Systems/Api/Exchange.ExchangeCache"

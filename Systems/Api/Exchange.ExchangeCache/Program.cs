@@ -1,21 +1,28 @@
+using Exchange.Common.Settings;
+using Exchange.ExchangeCache;
+using Exchange.ExchangeCache.Configuration;
+using Exchange.Services.Settings.SettingsConfigure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var mainSettings = Settings.Load<MainSettings>("Main");
+var logSettings = Settings.Load<LogSettings>("Log");
+var swaggerSettings = Settings.Load<SwaggerSettings>("Swagger");
+var redisSettings = Settings.Load<RedisSettings>("Redis");
+builder.AddAppLogger(mainSettings, logSettings);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddAppSwagger(swaggerSettings);
+builder.Services.RegisterServices();
+builder.Services.AddAppCors();
+builder.Services.AddAppRedis(redisSettings);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseAppSwagger();
 
+app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
