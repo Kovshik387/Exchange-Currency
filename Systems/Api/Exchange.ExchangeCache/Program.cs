@@ -21,6 +21,7 @@ builder.Services.AddAppRedis(redisSettings);
 var app = builder.Build();
 
 app.UseAppSwagger();
+app.UseAppCors();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

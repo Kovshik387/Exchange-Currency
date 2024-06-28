@@ -10,7 +10,7 @@ namespace Exchange.Services.Settings.SettingsConfigure
     {
         public string PublicUrl { get; private set; } = null!;
         public string InternalUrl { get; private set; } = null!;
-        public string AllowedOrigins { get; private set; } = null!;
+        public string AllowedOrigins { get; private set; } = "";
         public int UploadFileSizeLimit { get; private set; } = 20971520;
     }
 }

@@ -30,7 +30,9 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
     public async Task<RateValueDTO?> GetCursByDateAsync(DateOnly? date = null)
     {
         _logger.LogInformation("Date:\t" + date);
+
         var data = await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(date));
+        
         if (data is null)
         {
             var result = await GetValuteDataFromApiSingleAsync(
@@ -40,7 +42,6 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
             if (result is null) return result;
 
             var record = _mapper.Map<RateValue>(result);
-
             if (await _context.RateValues.FirstOrDefaultAsync(x => x.Date.Equals(record.Date)) is not null) return result;
 
             await _context.RateValues.AddAsync(record); await _context.SaveChangesAsync();
@@ -50,10 +51,28 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
         }
         else
         {
+            _logger.LogInformation($"count: {data.Volutes.Count}");
+            if (data.Volutes.Count <= 35)
+            {
+                var result = await GetValuteDataFromApiSingleAsync(
+                    date is null ? urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".", "/")
+                );
+                
+                if (result!.Volute is null) return result;
+                
+                var newVolutes = _mapper.Map<List<Volute>>(result.Volute).Except(data.Volutes);
+                
+                foreach(var item in newVolutes)
+                {
+                    data.Volutes.Add(item);
+                }
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Данные дозаписаны");
+            }
+
             _logger.LogInformation("Данные из бд");
             return _mapper.Map<RateValueDTO>(data);
         }
-
     }
 
     public async Task<IList<RecordDTO>> GetCursListByDateAsync(DateOnly date1, DateOnly date2, string nameVal)
@@ -123,7 +142,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
                             Name = voluteTemplate.Name,
                             Numcode = voluteTemplate.Numcode,
                         };
-                        _context.Volutes.Add(volute);
+                        await _context.Volutes.AddAsync(volute);
                         
                         continue;
                     }
