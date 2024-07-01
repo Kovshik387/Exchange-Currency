@@ -90,7 +90,7 @@ export default function MainContent() {
                 placeholder="Введите валюту"
                 onChange={handleSearchChange}
                 className="mr-2"
-                style={{ width: "150px" }}
+                style={{ width: "160px" }}
               />
             </Form.Group>
           </Stack>

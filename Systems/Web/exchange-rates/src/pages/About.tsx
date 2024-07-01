@@ -1,6 +1,31 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { CurrencyMarket } from "@models/Market";
+import axios from "axios";
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 
 export default function AboutPage() {
+    const [currencyData, setCurrencyData] = useState<CurrencyMarket | null>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const selectedDate = new Date();
+    const fetchCurrencyData = async (date: Date) => {
+        setIsLoading(true);
+        try {
+            const response = await axios.get('http://localhost:8020/daily', {
+                params: { date: format(date, 'dd.MM.yyyy') },
+            });
+            setCurrencyData(response.data);
+        } catch (error) {
+            console.error('Error fetching currency data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCurrencyData(selectedDate);
+    }, []);
+
     return (
         <>
             <Container style={{ ...ContainerStyle, fontSize: "20px" }}>
@@ -42,57 +67,29 @@ export default function AboutPage() {
                     </Col>
                     <Col>
                         <h2>Список валют</h2>
-                        <div className="row">
-                            <div className="col-md-6">Австралийский доллар</div>
-                            <div className="col-md-6">Азербайджанский манат</div>
-                            <div className="col-md-6">Армянский драм</div>
-                            <div className="col-md-6">Белорусский рубль</div>
-                            <div className="col-md-6">Болгарский лев</div>
-                            <div className="col-md-6">Бразильский реал</div>
-                            <div className="col-md-6">Венгерский форинт</div>
-                            <div className="col-md-6">Вон Республики Корея</div>
-                            <div className="col-md-6">Вьетнамский донг</div>
-                            <div className="col-md-6">Гонконгский доллар</div>
-                            <div className="col-md-6">Грузинский лари</div>
-                            <div className="col-md-6">Датская крона</div>
-                            <div className="col-md-6">Дирхам ОАЭ</div>
-                            <div className="col-md-6">Доллар США</div>
-                            <div className="col-md-6">Евро</div>
-                            <div className="col-md-6">Египетский фунт</div>
-                            <div className="col-md-6">Индийская рупия</div>
-                            <div className="col-md-6">Индонезийская рупия</div>
-                            <div className="col-md-6">Казахстанский тенге</div>
-                            <div className="col-md-6">Канадский доллар</div>
-                            <div className="col-md-6">Катарский риал</div>
-                            <div className="col-md-6">Киргизский сом</div>
-                            <div className="col-md-6">Китайский юань</div>
-                            <div className="col-md-6">Молдавский лей</div>
-                            <div className="col-md-6">Новозеландский доллар</div>
-                            <div className="col-md-6">Новый туркменский манат</div>
-                            <div className="col-md-6">Норвежская крона</div>
-                            <div className="col-md-6">Польский злотый</div>
-                            <div className="col-md-6">Румынский лей</div>
-                            <div className="col-md-6">СДР</div>
-                            <div className="col-md-6">Сербский динар</div>
-                            <div className="col-md-6">Сингапурский доллар</div>
-                            <div className="col-md-6">Таджикский сомони</div>
-                            <div className="col-md-6">Таиландский бат</div>
-                            <div className="col-md-6">Турецкая лира</div>
-                            <div className="col-md-6">Узбекский сум</div>
-                            <div className="col-md-6">Украинская гривна</div>
-                            <div className="col-md-6">Чешская крона</div>
-                            <div className="col-md-6">Шведская крона</div>
-                            <div className="col-md-6">Швейцарский франк</div>
-                            <div className="col-md-6">Южноафриканский рэнд</div>
-                            <div className="col-md-6">Японская иена</div>
-                            <div className="col-md-6">Фунт стерлингов Соединенного королевства</div>
-                        </div>
+                        {isLoading ? (
+                            <div style={{ textAlign: 'center' }}>
+                                <Spinner animation="border" role="status">
+                                    <span className="sr-only"></span>
+                                </Spinner>
+                            </div>
+                        ) : (
+                            <div className="row">
+                                {currencyData?.volute.map((item) => (
+                                    <div className="col-md-6">
+                                        <a href={item.numCode.toString()}>
+                                            {item.name}
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </Col>
                 </Row>
 
 
 
-            </Container>
+            </Container >
         </>
     )
 }
