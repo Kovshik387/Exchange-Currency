@@ -19,13 +19,19 @@ namespace Exchange.Services.ValutaRate.Services;
 /// <param name="context"></param>
 /// <param name="mapper"></param>
 /// <param name="logger"></param>
-public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<VoluteRateService> logger) : IVoluteRateService
+public class VoluteRateService : IVoluteRateService
 {
     private readonly string urlDaily = "http://www.cbr.ru/scripts/XML_daily.asp";
     private readonly string urlInterval = "http://www.cbr.ru/scripts/XML_dynamic.asp";
-    private readonly RateDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
-    private readonly ILogger<VoluteRateService> _logger = logger;
+    private readonly int _voluteTypeSize = 35;
+    private readonly RateDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly ILogger<VoluteRateService> _logger;
+
+    public VoluteRateService(RateDbContext context, IMapper mapper, ILogger<VoluteRateService> logger)
+    {
+        this._context = context; this._mapper = mapper; this._logger = logger;
+    }
 
     public async Task<RateValueDTO?> GetCursByDateAsync(DateOnly? date = null)
     {
@@ -35,7 +41,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
         
         if (data is null)
         {
-            var result = await GetValuteDataFromApiSingleAsync(
+            var result = await GetValuteDataFromApiAsync<RateValueDTO>(
                 date is null ? urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".","/")
             );
 
@@ -52,9 +58,9 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
         else
         {
             _logger.LogInformation($"count: {data.Volutes.Count}");
-            if (data.Volutes.Count <= 35)
+            if (data.Volutes.Count <= _voluteTypeSize)
             {
-                var result = await GetValuteDataFromApiSingleAsync(
+                var result = await GetValuteDataFromApiAsync<RateValueDTO>(
                     date is null ? urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".", "/")
                 );
                 
@@ -99,7 +105,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
 
             foreach (var dateRange in missingDateRanges)
             {
-                var apiResult = await GetValuteDataFromApiAsync($"{urlInterval}?date_req1={dateRange.Item1}&" +
+                var apiResult = await GetValuteDataFromApiAsync<RatesValueDTO>($"{urlInterval}?date_req1={dateRange.Item1}&" +
                     $"date_req2={dateRange.Item2}&VAL_NM_RQ={nameVal}");
                 _logger.LogInformation($"Запрос недостающих дат: {dateRange.Item1}\t|\t{dateRange.Item2}");
 
@@ -183,7 +189,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
     {
         var ranges = new List<(DateOnly, DateOnly)>();
         
-        if (!dates.Any()) return ranges;
+        if (dates.Count == 0) return ranges;
 
         dates.Sort();
 
@@ -208,34 +214,7 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
         return ranges;
     }
 
-    private async Task<RatesValueDTO?> GetValuteDataFromApiAsync(string url)
-    {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        using HttpClient client = new();
-        HttpResponseMessage response = await client.GetAsync(url);
-
-        if (!response.IsSuccessStatusCode) throw 
-                new ApiUnavailableException(response.StatusCode.ToString(), $"Api CBR не доступно");
-
-        try
-        {
-            using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            XmlSerializer serializer = new XmlSerializer(typeof(RatesValueDTO));
-
-            using (StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("windows-1251")))
-            {
-                RatesValueDTO valCurs = (RatesValueDTO)serializer.Deserialize(reader)!;
-                return valCurs;
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return null;
-        }
-    }
-
-    private async Task<RateValueDTO?> GetValuteDataFromApiSingleAsync(string url)
+    private async Task<TData?> GetValuteDataFromApiAsync<TData>(string url)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         try
@@ -246,18 +225,16 @@ public class VoluteRateService(RateDbContext context, IMapper mapper, ILogger<Vo
             if (!response.IsSuccessStatusCode) throw new ApiUnavailableException(response.StatusCode.ToString(), $"Api CBR не доступно");
 
             using Stream responseStream = await response.Content.ReadAsStreamAsync();
-            XmlSerializer serializer = new XmlSerializer(typeof(RateValueDTO));
+            XmlSerializer serializer = new XmlSerializer(typeof(TData));
 
-            using (StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("windows-1251")))
-            {
-                RateValueDTO result = (RateValueDTO)serializer.Deserialize(reader)!;
-                return result;
-            }
+            using StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("windows-1251"));
+            var result = (TData)serializer.Deserialize(reader)!;
+            return result;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return null;
+            return default;
         }
     }
 

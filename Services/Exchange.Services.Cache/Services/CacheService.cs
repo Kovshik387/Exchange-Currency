@@ -10,86 +10,83 @@ using Newtonsoft.Json.Serialization;
 
 namespace Exchange.Services.Cache.Services;
 
-public class CacheService(IDistributedCache distributedCache, RedisSettings redisSettings,
-    ApiEndPointSettings pointSettings, ILogger<CacheService> logger) : ICacheService
+public class CacheService : ICacheService
 {
-    private readonly IDistributedCache _cache = distributedCache;
-    private readonly ApiEndPointSettings _pointSettings = pointSettings;
-    private readonly ILogger<CacheService> _logger = logger;
-    private readonly RedisSettings _redisSettings = redisSettings;
+    private readonly IDistributedCache _cache;
+    private readonly RedisSettings _redisSettings;
+    private readonly ApiEndPointSettings _endPointSettings;
+    private readonly ILogger<CacheService> _logger;
+    private readonly JsonSerializerSettings _serializerSettings;
+    private readonly string _dateFormatString = "dd.MM.yyyy";
+
+    public CacheService(IDistributedCache distributedCache, RedisSettings redisSettings, ApiEndPointSettings pointSettings, ILogger<CacheService> logger)
+    {
+        _cache = distributedCache;
+        _redisSettings = redisSettings;
+        _endPointSettings = pointSettings;
+        _logger = logger;
+        _serializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            DateFormatString = _dateFormatString
+        };
+    }
     public async Task<ExchangeCacheService.DailyValuteResponse?> GetDataByDateAsync(string date)
     {
-        ExchangeCacheService.DailyValuteResponse? result = null;
-
-        string? requestString = await _cache.GetStringAsync(date);
-
-        if (requestString is not null)
-            result = JsonConvert.DeserializeObject<ExchangeCacheService.DailyValuteResponse>(requestString, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DateFormatString = "dd.MM.yyyy"
-            });
-
-        if (result is null)
-        {
-            _logger.LogInformation(_pointSettings.GrpcServerPath);
-            using var channel = GrpcChannel.ForAddress(_pointSettings.GrpcServerPath);
-            var client = new ExchangeCacheService.Volute.VoluteClient(channel);
-            result = await client.GetCurrentValueAsync(new ExchangeCacheService.DailyValuteRequest() { Date = date });
-
-            var serializedResult = JsonConvert.SerializeObject(result, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DateFormatString = "dd.MM.yyyy"
-            });
-
-            await _cache.SetStringAsync(date, serializedResult, new DistributedCacheEntryOptions
-            {
-                SlidingExpiration = TimeSpan.FromMinutes(_redisSettings.CacheSmallData)
-            });
-
-            _logger.LogInformation("Data from database");
-        }
-        else _logger.LogInformation("Data from cache");
-
-        return result;
+        return await GetDataFromCacheOrSource<ExchangeCacheService.DailyValuteResponse>(date,
+            async () => await GetDailyValuteFromSource(date),
+            TimeSpan.FromMinutes(_redisSettings.CacheSmallData));
     }
 
     public async Task<ExchangeCacheService.DynamicValueResponse?> GetDataByDatesAsync(string date1, string date2, string name)
     {
-        ExchangeCacheService.DynamicValueResponse? result = null;
-        string searchSting = $"{date1} {date2} {name}";
-        string? requestString = await _cache.GetStringAsync(searchSting);
+        string searchString = $"{date1} {date2} {name}";
+        return await GetDataFromCacheOrSource<ExchangeCacheService.DynamicValueResponse>(searchString,
+            async () => await GetDynamicValueFromSource(date1, date2, name),
+            TimeSpan.FromMinutes(_redisSettings.CacheLargeData));
+    }
+
+    private async Task<TData?> GetDataFromCacheOrSource<TData>(string cacheKey, Func<Task<TData>> getDataFromSource, TimeSpan cacheDuration)
+    {
+        TData? result = default;
+        string? requestString = await _cache.GetStringAsync(cacheKey);
 
         if (requestString is not null)
-            result = JsonConvert.DeserializeObject<ExchangeCacheService.DynamicValueResponse>(requestString, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DateFormatString = "dd.MM.yyyy",
-            });
+        {
+            result = JsonConvert.DeserializeObject<TData>(requestString, _serializerSettings);
+        }
 
         if (result is null)
         {
-            _logger.LogInformation(_pointSettings.GrpcServerPath);
-            using var channel = GrpcChannel.ForAddress(_pointSettings.GrpcServerPath);
-            var client = new ExchangeCacheService.Volute.VoluteClient(channel);
-            result = await client.GetDynamicValueAsync(new ExchangeCacheService.DynamicValueRequest() { Date1 = date1, Date2 = date2, Name = name });
+            result = await getDataFromSource();
 
-            var serializedResult = JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            var serializedResult = JsonConvert.SerializeObject(result, _serializerSettings);
+            await _cache.SetStringAsync(cacheKey, serializedResult, new DistributedCacheEntryOptions
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DateFormatString = "dd.MM.yyyy"
-            });
-
-            await _cache.SetStringAsync(searchSting, serializedResult, new DistributedCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_redisSettings.CacheLargeData)
+                SlidingExpiration = cacheDuration
             });
 
             _logger.LogInformation("Data from database");
         }
-        else _logger.LogInformation("Data from cache");
+        else
+        {
+            _logger.LogInformation("Data from cache");
+        }
 
         return result;
+    }
+
+    private async Task<ExchangeCacheService.DailyValuteResponse> GetDailyValuteFromSource(string date)
+    {
+        using var channel = GrpcChannel.ForAddress(_endPointSettings.GrpcServerPath);
+        var client = new ExchangeCacheService.Volute.VoluteClient(channel);
+        return await client.GetCurrentValueAsync(new ExchangeCacheService.DailyValuteRequest { Date = date });
+    }
+
+    private async Task<ExchangeCacheService.DynamicValueResponse> GetDynamicValueFromSource(string date1, string date2, string name)
+    {
+        using var channel = GrpcChannel.ForAddress(_endPointSettings.GrpcServerPath);
+        var client = new ExchangeCacheService.Volute.VoluteClient(channel);
+        return await client.GetDynamicValueAsync(new ExchangeCacheService.DynamicValueRequest { Date1 = date1, Date2 = date2, Name = name });
     }
 }

@@ -5,12 +5,13 @@ namespace Exchange.ExchangeCache.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class CacheController(ICacheService cacheService) : ControllerBase
+    public class CacheController : ControllerBase
     {
-        private readonly ICacheService _cacheService = cacheService;
+        private readonly ICacheService _cacheService;
+        public CacheController(ICacheService cacheService) => _cacheService = cacheService;
         
-        [HttpGet("/daily")]
-        public async Task<IActionResult> GetData(string date)
+        [HttpGet("/exchange-rates")]
+        public async Task<IActionResult> GetData([FromQuery] string date)
         {
             if (DateOnly.TryParseExact(date, "dd.MM.yyyy",out _))
             {
@@ -22,8 +23,8 @@ namespace Exchange.ExchangeCache.Controllers
             }
         }
 
-        [HttpGet("/dynamic")]
-        public async Task<IActionResult> GetDynamicValue(string date1, string date2, string name)
+        [HttpGet("/exchange-rate")]
+        public async Task<IActionResult> GetDynamicValue([FromQuery] string date1, [FromQuery] string date2, [FromQuery] string name)
         {
             if (DateOnly.TryParseExact(date1, "dd.MM.yyyy", out _) && DateOnly.TryParseExact(date2, "dd.MM.yyyy", out _))
             {
