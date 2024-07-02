@@ -3,6 +3,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
+import Routes from "@utils/routers";
 
 export default function AboutPage() {
     const [currencyData, setCurrencyData] = useState<CurrencyMarket | null>();
@@ -11,7 +12,7 @@ export default function AboutPage() {
     const fetchCurrencyData = async (date: Date) => {
         setIsLoading(true);
         try {
-            const response = await axios.get('http://localhost:8020/daily', {
+            const response = await axios.get(Routes.ExchangeRates, {
                 params: { date: format(date, 'dd.MM.yyyy') },
             });
             setCurrencyData(response.data);
@@ -77,7 +78,7 @@ export default function AboutPage() {
                             <div className="row">
                                 {currencyData?.volute.map((item) => (
                                     <div className="col-md-6">
-                                        <a href={item.numCode.toString()}>
+                                        <a href={`/details/${item.id}`}>
                                             {item.name}
                                         </a>
                                     </div>

@@ -1,4 +1,5 @@
 import { CurrencyMarket } from '@models/Market';
+import Routes from "@utils/routers"
 import axios from 'axios';
 import { addDays, format } from 'date-fns';
 import { useEffect } from 'react';
@@ -10,7 +11,7 @@ const fetchCurrencyData = async () => {
         (localStorage.getItem("date") == null ||
             localStorage.getItem("date") != format(addDays(new Date(), 1), 'dd.MM.yyyy'))) {
         try {
-            const response = await axios.get('http://localhost:8020/daily', {
+            const response = await axios.get(Routes.ExchangeRates, {
                 params: { date: format(addDays(new Date(), 1), 'dd.MM.yyyy') },
             });
             const data = response.data as CurrencyMarket;
@@ -43,11 +44,11 @@ export default function Header() {
                     </Nav>
                     <Nav className="ms-auto" >
                         <div className="d-flex align-items-center p-1">
-                            <img src="volutes/dollar.svg" height={25} alt="Dollar Icon" />
+                            <img src="/volutes/dollar.svg" height={25} alt="Dollar Icon" />
                             <h6 style={{paddingTop: "6px"}}>{localStorage.getItem("dollar")}</h6>
                         </div>
                         <div className="d-flex align-items-center p-1">
-                            <img src="volutes/euro.svg" height={25} alt="Euro Icon" />
+                            <img src="/volutes/euro.svg" height={25} alt="Euro Icon" />
                             <h6 style={{paddingTop: "6px"}}>{localStorage.getItem("euro")}</h6>
                         </div>
                     </Nav>

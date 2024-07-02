@@ -1,4 +1,5 @@
 import { CurrencyMarket } from '@models/Market';
+import Routes from '@utils/routers'
 import { Container, Form, Spinner, Stack } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import VoluteTable from '@components/Volute/VoluteTable';
@@ -25,7 +26,7 @@ export default function MainContent() {
   const fetchCurrencyData = async (date: Date) => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:8020/daily', {
+      const response = await axios.get(Routes.ExchangeRates, {
         params: { date: format(date, 'dd.MM.yyyy') },
       });
       setCurrencyData(response.data);

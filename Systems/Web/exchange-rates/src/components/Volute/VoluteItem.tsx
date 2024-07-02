@@ -8,14 +8,14 @@ interface CurrencyItemProps {
 
 export default function VoluteItem({ currency }: CurrencyItemProps) {
     const navigation = useNavigate();
-    
+    console.log(currency);
     useEffect(() => {
 
     })
     
     return (
         <>
-            <tr onClick={() => {navigation("/fdssfd")}}>
+            <tr onClick={() => {navigation(`/details/${currency.id}`)}}>
                 <td>{currency.numCode}</td>
                 <td>{currency.charCode}</td>
                 <td>{currency.nominal}</td>
