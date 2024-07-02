@@ -28,7 +28,7 @@ namespace Exchange.ExchangeCache.Controllers
         {
             if (DateOnly.TryParseExact(date1, "dd.MM.yyyy", out _) && DateOnly.TryParseExact(date2, "dd.MM.yyyy", out _))
             {
-                return Ok(await _cacheService.GetDataByDatesAsync(date1, date2,name));
+                return Ok(await _cacheService.GetDataByDatesAsync(date1, date2, name));
             }
             else
             {
