@@ -25,8 +25,4 @@
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
   </ItemGroup>
 
-    <ItemGroup>
-	    <Protobuf Include="Protos\exchange.proto" GrpcServices="Client" />
-    </ItemGroup>
-
 </Project>
