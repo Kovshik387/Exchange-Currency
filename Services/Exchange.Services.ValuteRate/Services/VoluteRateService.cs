@@ -121,6 +121,7 @@ public class VoluteRateService : IVoluteRateService
                 foreach (var item in apiResult.Records)
                 {
                     var recordDate = DateOnly.Parse(item.Date);
+                    item.Name = voluteTemplate!.Name;
                     result.Add(item);
 
                     if (!existingDates.Contains(recordDate))
@@ -175,6 +176,7 @@ public class VoluteRateService : IVoluteRateService
         {
             Date = x.Valcurs.Date.ToString("dd.MM.yyyy"),
             Id = x.Idname,
+            Name = x.Name,
             Nominal = x.Nominal,
             Value = x.Value,
             VunitRate = x.Vunitrate,

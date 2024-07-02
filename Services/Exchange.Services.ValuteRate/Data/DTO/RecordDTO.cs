@@ -16,7 +16,7 @@ namespace Exchange.Services.ValutaRate.Data.DTO
 
         [XmlAttribute("Id")]
         public string Id { get; set; } = string.Empty;
-
+        public string Name { get; set; } = string.Empty;
         public int Nominal { get; set; }
         [XmlIgnore]
         public decimal Value { get; set; } = default;
