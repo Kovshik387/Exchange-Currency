@@ -36,6 +36,7 @@ message RecordResponse {
     int32 nominal = 3;
     double value = 4;
     double vunitRate = 5;
+    string name = 6;
 }
 
 message DynamicValueResponse{
