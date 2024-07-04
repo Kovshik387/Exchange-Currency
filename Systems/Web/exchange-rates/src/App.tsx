@@ -5,6 +5,7 @@ import MainContent from '@components/MainContent'
 import * as ReactRouter from "react-router-dom";
 import AboutPage from '@pages/About';
 import VoluteDetailsPage from '@pages/VoluteDetails';
+import ComparisonPage from '@pages/Comparison';
 
 const App: React.FC = () => {
 
@@ -20,6 +21,10 @@ const App: React.FC = () => {
     {
       path: "/details/:name",
       element: <VoluteDetailsPage />
+    },
+    {
+      path: "/currency",
+      element: <ComparisonPage />
     }
   ]);
 
@@ -38,4 +43,5 @@ const App: React.FC = () => {
   );
 };
 
-export default App
+export default App;
+

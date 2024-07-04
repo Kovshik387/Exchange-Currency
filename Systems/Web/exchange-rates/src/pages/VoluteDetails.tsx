@@ -41,6 +41,8 @@ export default function VoluteDetailsPage() {
         return sortedData ? Math.min(...sortedData.record.map(item => item.value)) : 0;
     };
 
+
+
     const fetchCurrencyData = async () => {
         setIsLoading(true);
         try {
@@ -107,7 +109,7 @@ export default function VoluteDetailsPage() {
                         <Row>
                             <Col xs={12} md={6}>
                                 {dataRate && (
-                                    <ResponsiveContainer height={300}>
+                                    <ResponsiveContainer height={400}>
                                         <AreaChart data={dataRate.record}>
                                             <defs>
                                                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -116,8 +118,8 @@ export default function VoluteDetailsPage() {
                                                 </linearGradient>
                                             </defs>
                                             <CartesianGrid stroke="#ccc" />
-                                            <XAxis dataKey="date" interval="preserveStartEnd" />
-                                            <YAxis domain={[getMinValue() - 3, "auto"]} />
+                                            <XAxis dataKey="date" tick={{ fontSize: 12 }} interval="preserveStartEnd" />
+                                            <YAxis domain={["auto"]} />
                                             <Tooltip content={<CustomTooltip />} />
                                             <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="url(#colorValue)" />
                                         </AreaChart>
@@ -150,19 +152,21 @@ export default function VoluteDetailsPage() {
 
 
                             <Col xs={12} md={6}>
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th onClick={handleSort} style={{ cursor: 'pointer' }}>Дата {sortOrder === "desc" ? <ArrowDown width={15} /> : <ArrowUp width={15} />}</th>
-                                            <th>Курс</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sortedData?.record.map((currency, index) => (
-                                            <RecordItem key={index} record={currency} />
-                                        ))}
-                                    </tbody>
-                                </Table>
+                                <div style={TableStyle}>
+                                    <Table striped bordered hover >
+                                        <thead>
+                                            <tr>
+                                                <th onClick={handleSort} style={{ cursor: 'pointer' }}>Дата {sortOrder === "desc" ? <ArrowDown width={15} /> : <ArrowUp width={15} />}</th>
+                                                <th>Курс</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {sortedData?.record.map((currency, index) => (
+                                                <RecordItem key={index} record={currency} />
+                                            ))}
+                                        </tbody>
+                                    </Table>
+                                </div>
                             </Col>
                         </Row>
                     </>
@@ -170,6 +174,12 @@ export default function VoluteDetailsPage() {
             </Container>
         </>
     )
+}
+const TableStyle: React.CSSProperties = {
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    maxHeight: "400px",
+    overflowY: "auto"
 }
 
 const ContainerStyle: React.CSSProperties = {
