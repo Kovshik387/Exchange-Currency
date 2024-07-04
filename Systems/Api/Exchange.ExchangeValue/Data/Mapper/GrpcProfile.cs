@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Exchange.Services.ValutaRate.Data.DTO;
-using ExchangeVoluteService;
+using ExchangeServiceProto;
 
 namespace Exchange.ExchangeValute.Data.Mapper;
 

@@ -1,11 +1,8 @@
 ﻿using Grpc.Core;
-using ExchangeVoluteService;
+using ExchangeServiceProto;
 using Exchange.Services.ValutaRate.Infrastructure;
 using System.Globalization;
 using AutoMapper;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
-using Exchange.Services.ValutaRate.Data.DTO;
 
 namespace Exchange.ExchangeValute.Services;
 

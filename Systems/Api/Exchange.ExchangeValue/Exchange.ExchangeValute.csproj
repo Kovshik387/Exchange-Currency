@@ -34,8 +34,8 @@
     <ProjectReference Include="..\..\..\Shared\Exchange.Common\Exchange.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-	  <Protobuf Include="Protos\exchange.proto" GrpcServices="Server" />
-  </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="..\..\..\Shared\Exchange.Common\Protos\exchange.proto" GrpcServices="Server" />
+	</ItemGroup>
 
 </Project>

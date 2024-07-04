@@ -1,4 +1,4 @@
-﻿using Exchange.Services.Cache.Data.DTO;
+﻿using ExchangeServiceProto;
 
 namespace Exchange.Services.Cache.Infrastructure;
 
@@ -7,7 +7,7 @@ namespace Exchange.Services.Cache.Infrastructure;
 /// </summary>
 public interface ICacheService
 {
-    public Task<ExchangeCacheService.DailyValuteResponse?> GetDataByDateAsync(string date);
+    public Task<DailyValuteResponse?> GetDataByDateAsync(string date);
 
-    public Task<ExchangeCacheService.DynamicValueResponse?> GetDataByDatesAsync(string date1, string date2, string name);
+    public Task<DynamicValueResponse?> GetDataByDatesAsync(string date1, string date2, string name);
 }

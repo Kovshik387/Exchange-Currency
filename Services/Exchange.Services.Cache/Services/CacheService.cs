@@ -1,12 +1,11 @@
-﻿using Exchange.Services.Cache.Data.DTO;
-using Exchange.Services.Cache.Infrastructure;
+﻿using Exchange.Services.Cache.Infrastructure;
 using Exchange.Services.Settings.SettingsConfigure;
 using Microsoft.Extensions.Caching.Distributed;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
-using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using ExchangeServiceProto;
 
 namespace Exchange.Services.Cache.Services;
 
@@ -31,22 +30,22 @@ public class CacheService : ICacheService
             DateFormatString = _dateFormatString
         };
     }
-    public async Task<ExchangeCacheService.DailyValuteResponse?> GetDataByDateAsync(string date)
+    public async Task<DailyValuteResponse?> GetDataByDateAsync(string date)
     {
-        return await GetDataFromCacheOrSource<ExchangeCacheService.DailyValuteResponse>(date,
+        return await GetDataVolute<DailyValuteResponse>(date,
             async () => await GetDailyValuteFromSource(date),
             TimeSpan.FromMinutes(_redisSettings.CacheSmallData));
     }
 
-    public async Task<ExchangeCacheService.DynamicValueResponse?> GetDataByDatesAsync(string date1, string date2, string name)
+    public async Task<DynamicValueResponse?> GetDataByDatesAsync(string date1, string date2, string name)
     {
         string searchString = $"{date1} {date2} {name}";
-        return await GetDataFromCacheOrSource<ExchangeCacheService.DynamicValueResponse>(searchString,
+        return await GetDataVolute<DynamicValueResponse>(searchString,
             async () => await GetDynamicValueFromSource(date1, date2, name),
             TimeSpan.FromMinutes(_redisSettings.CacheLargeData));
     }
 
-    private async Task<TData?> GetDataFromCacheOrSource<TData>(string cacheKey, Func<Task<TData>> getDataFromSource, TimeSpan cacheDuration)
+    private async Task<TData?> GetDataVolute<TData>(string cacheKey, Func<Task<TData>> getDataFromSource, TimeSpan cacheDuration)
     {
         TData? result = default;
         string? requestString = await _cache.GetStringAsync(cacheKey);
@@ -76,17 +75,17 @@ public class CacheService : ICacheService
         return result;
     }
 
-    private async Task<ExchangeCacheService.DailyValuteResponse> GetDailyValuteFromSource(string date)
+    private async Task<DailyValuteResponse> GetDailyValuteFromSource(string date)
     {
         using var channel = GrpcChannel.ForAddress(_endPointSettings.GrpcServerPath);
-        var client = new ExchangeCacheService.Volute.VoluteClient(channel);
-        return await client.GetCurrentValueAsync(new ExchangeCacheService.DailyValuteRequest { Date = date });
+        var client = new Volute.VoluteClient(channel);
+        return await client.GetCurrentValueAsync(new DailyValuteRequest { Date = date });
     }
 
-    private async Task<ExchangeCacheService.DynamicValueResponse> GetDynamicValueFromSource(string date1, string date2, string name)
+    private async Task<DynamicValueResponse> GetDynamicValueFromSource(string date1, string date2, string name)
     {
         using var channel = GrpcChannel.ForAddress(_endPointSettings.GrpcServerPath);
-        var client = new ExchangeCacheService.Volute.VoluteClient(channel);
-        return await client.GetDynamicValueAsync(new ExchangeCacheService.DynamicValueRequest { Date1 = date1, Date2 = date2, Name = name });
+        var client = new Volute.VoluteClient(channel);
+        return await client.GetDynamicValueAsync(new DynamicValueRequest { Date1 = date1, Date2 = date2, Name = name });
     }
 }
