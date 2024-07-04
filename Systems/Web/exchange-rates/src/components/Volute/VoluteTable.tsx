@@ -8,24 +8,28 @@ interface CurrencyTableProps {
 
 export default function VoluteTable({ data }: CurrencyTableProps) {
     return (
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Цифр. код</th>
-                        <th>Букв. код</th>
-                        <th>Единиц</th>
-                        <th>Валюта</th>
-                        <th>Курс</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data.volute.map((currency) => (
-                            <VoluteItem key={currency.id} currency={currency} />
-                        ))
-                    }
-                </tbody>
-            </Table>
+        <Table striped bordered hover>
+            <thead>
+                <tr>
+                    <th>Цифр. код</th>
+                    <th>Букв. код</th>
+                    <th>Единиц</th>
+                    <th>Валюта</th>
+                    <th>Курс</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    data.volute.map((currency) => (
+                        <VoluteItem
+                            key={currency.id}
+                            currency={currency}
+                        />
+                    ))
+                }
+            </tbody>
+        </Table>
     );
 };
+
 

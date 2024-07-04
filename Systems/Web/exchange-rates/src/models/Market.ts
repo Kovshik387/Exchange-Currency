@@ -8,13 +8,14 @@ export interface Volute {
   vunitRate: number;
   date: string
 }
+export interface Record {
+  date: any;
+  value: any;
+  record: Volute[]
+}
 
 export interface CurrencyMarket {
     date: string;
     name: string;
     volute: Volute[];
-}
-
-export interface Record {
-  record: Volute[]
 }

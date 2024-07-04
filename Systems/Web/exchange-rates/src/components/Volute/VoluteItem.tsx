@@ -12,10 +12,10 @@ export default function VoluteItem({ currency }: CurrencyItemProps) {
     useEffect(() => {
 
     })
-    
+
     return (
         <>
-            <tr onClick={() => {navigation(`/details/${currency.id}`)}}>
+            <tr onClick={() => { navigation(`/details/${currency.id}`) }}>
                 <td>{currency.numCode}</td>
                 <td>{currency.charCode}</td>
                 <td>{currency.nominal}</td>

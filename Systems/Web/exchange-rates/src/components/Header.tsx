@@ -40,16 +40,16 @@ export default function Header() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/daily">Курсы</Nav.Link>
-                        <Nav.Link href="#link">Динамика</Nav.Link>
+                        <Nav.Link href="/currency">Динамика</Nav.Link>
                     </Nav>
                     <Nav className="ms-auto" >
                         <div className="d-flex align-items-center p-1">
                             <img src="/volutes/dollar.svg" height={25} alt="Dollar Icon" />
-                            <h6 style={{paddingTop: "6px"}}>{localStorage.getItem("dollar")}</h6>
+                            <h6 style={{ paddingTop: "6px" }}>&nbsp;{localStorage.getItem("dollar")}</h6>
                         </div>
                         <div className="d-flex align-items-center p-1">
                             <img src="/volutes/euro.svg" height={25} alt="Euro Icon" />
-                            <h6 style={{paddingTop: "6px"}}>{localStorage.getItem("euro")}</h6>
+                            <h6 style={{ paddingTop: "6px" }}>&nbsp;{localStorage.getItem("euro")}</h6>
                         </div>
                     </Nav>
                 </Navbar.Collapse>
@@ -61,6 +61,5 @@ export default function Header() {
 const HeaderStyle: React.CSSProperties = {
     backgroundColor: "#dadada",
     color: "black",
-    // height: "50px",
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
 }

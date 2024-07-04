@@ -6,17 +6,6 @@ import VoluteTable from '@components/Volute/VoluteTable';
 import { addDays, format } from 'date-fns';
 import axios from 'axios';
 
-const ContainerStyle: React.CSSProperties = {
-  padding: '20px',
-  marginTop: "65px",
-  marginBottom: "100px",
-  overflowY: "auto",
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  borderRadius: '8px',
-  backgroundColor: '#fff',
-  height: "85vh"
-};
-
 export default function MainContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [currencyData, setCurrencyData] = useState<CurrencyMarket | null>();
@@ -103,9 +92,22 @@ export default function MainContent() {
             </Spinner>
           </div>
         ) : (
-          filteredData && <VoluteTable data={filteredData} />
+          filteredData && <VoluteTable
+            data={filteredData}
+          />
         )}
       </Container>
     </div>
   );
 }
+
+const ContainerStyle: React.CSSProperties = {
+  padding: '20px',
+  marginTop: "65px",
+  marginBottom: "100px",
+  overflowY: "auto",
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  borderRadius: '8px',
+  backgroundColor: '#fff',
+  height: "85vh"
+};
