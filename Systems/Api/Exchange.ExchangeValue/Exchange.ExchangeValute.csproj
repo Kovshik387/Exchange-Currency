@@ -25,9 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Data\Exchange.Context\Exchange.Context.csproj" />
-    <ProjectReference Include="..\..\..\Data\Exchange.Entities\Exchange.Entities.csproj" />
-    <ProjectReference Include="..\..\..\Data\Migrations\Exchange.Migrations.PgSql\Exchange.Context.Migrations.PgSql.csproj" />
+    <ProjectReference Include="..\..\..\Data\Account\Exchange.Account.Context\Exchange.Account.Context.csproj" />
+    <ProjectReference Include="..\..\..\Data\Rate\Exchange.Context\Exchange.Context.csproj" />
+    <ProjectReference Include="..\..\..\Data\Rate\Exchange.Entities\Exchange.Entities.csproj" />
+    <ProjectReference Include="..\..\..\Data\Rate\Migrations\Exchange.Migrations.PgSql\Exchange.Context.Migrations.PgSql.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Logger\Exchange.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.ValuteRate\Exchange.Services.ValutaRate.csproj" />

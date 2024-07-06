@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\Exchange.Context\Exchange.Context.csproj" />
-    <ProjectReference Include="..\..\Data\Exchange.Entities\Exchange.Entities.csproj" />
+    <ProjectReference Include="..\..\Data\Rate\Exchange.Context\Exchange.Context.csproj" />
+    <ProjectReference Include="..\..\Data\Rate\Exchange.Entities\Exchange.Entities.csproj" />
   </ItemGroup>
 
 </Project>
