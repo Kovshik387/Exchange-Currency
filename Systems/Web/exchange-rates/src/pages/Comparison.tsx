@@ -68,8 +68,6 @@ export default function ComparisonPage() {
 
     const fetchData = async () => {
         setIsLoading(true);
-        console.log('Fetching data for date range:', date1, date2);
-
         try {
             const allData = await Promise.all(currencies.map(name => fetchCurrencyData(name)));
             const transformedData: CurrencyData[] = [];
@@ -89,7 +87,6 @@ export default function ComparisonPage() {
             });
 
             setDataRates(transformedData);
-            console.log('Data fetched and transformed:', transformedData);
         } catch (error) {
             console.error('Error in fetchData:', error);
         }
@@ -166,9 +163,7 @@ export default function ComparisonPage() {
 
     const handleCopyLink = () => {
         const link = generateShareableLink();
-        console.log('Generated link:', link); // Debug statement
         navigator.clipboard.writeText(link).then(() => {
-            console.log('Link copied to clipboard'); // Debug statement
             setShowCopyNotification(true);
             setTimeout(() => setShowCopyNotification(false), 2000);
         }).catch(err => {

@@ -1,14 +1,15 @@
 import { CurrencyMarket } from "@models/Market";
 import axios from "axios";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { useEffect, useState } from "react";
-import { Col, Container, Row, Spinner } from "react-bootstrap";
+import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import Routes from "@utils/routers";
+import { Link } from "react-router-dom";
 
 export default function AboutPage() {
     const [currencyData, setCurrencyData] = useState<CurrencyMarket | null>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const selectedDate = new Date();
+    const selectedDate = addDays(new Date(), 1);
     const fetchCurrencyData = async (date: Date) => {
         setIsLoading(true);
         try {
@@ -26,6 +27,20 @@ export default function AboutPage() {
     useEffect(() => {
         fetchCurrencyData(selectedDate);
     }, []);
+
+    const cardStyle: React.CSSProperties = {
+        backgroundColor: '#f8f9fa',
+        color: '#000',
+        transform: 'translateY(5px)',
+        height: "100px",
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+    };
+
+    const cardHoverStyle: React.CSSProperties = {
+        transform: 'translateY(-5px)',
+        color: "#8884d8",
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+    };
 
     return (
         <>
@@ -66,7 +81,7 @@ export default function AboutPage() {
                             </li>
                         </ul>
                     </Col>
-                    <Col>
+                    <Col >
                         <h2>Список валют</h2>
                         {isLoading ? (
                             <div style={{ textAlign: 'center' }}>
@@ -75,15 +90,30 @@ export default function AboutPage() {
                                 </Spinner>
                             </div>
                         ) : (
-                            <div className="row">
+                            <Row style={{ height: "550px", overflowY: "auto", boxShadow: '1px 2px 2px rgba(0, 0, 0, 0.1)', borderRadius: "5px" }}>
                                 {currencyData?.volute.map((item) => (
-                                    <div className="col-md-6">
-                                        <a href={`/details/${item.id}`}>
-                                            {item.name}
-                                        </a>
-                                    </div>
+                                    <Col md={4} key={item.id} style={{ padding: "10px" }}>
+                                        <Link
+                                            to={`/details/${item.id}`}
+                                            style={{
+                                                textAlign: 'center',
+                                                textDecoration: 'none',
+                                            }}
+                                        >
+                                            <Card
+                                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
+                                                onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardStyle)}
+                                                style={cardStyle}
+                                            >
+                                                <Card.Body
+                                                >
+                                                    <Card.Title>{item.name}</Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Link>
+                                    </Col>
                                 ))}
-                            </div>
+                            </Row>
                         )}
                     </Col>
                 </Row>
@@ -94,6 +124,8 @@ export default function AboutPage() {
         </>
     )
 }
+
+
 
 const ContainerStyle: React.CSSProperties = {
     padding: '20px',

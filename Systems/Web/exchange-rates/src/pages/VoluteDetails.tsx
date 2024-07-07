@@ -37,12 +37,6 @@ export default function VoluteDetailsPage() {
     const [sortedData, setSortedData] = useState<Record | null>();
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-    const getMinValue = () => {
-        return sortedData ? Math.min(...sortedData.record.map(item => item.value)) : 0;
-    };
-
-
-
     const fetchCurrencyData = async () => {
         setIsLoading(true);
         try {
