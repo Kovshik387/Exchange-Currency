@@ -91,20 +91,11 @@ public class AuthorizationService : IAuthorizationService
             };
         }
 
-        var userExist = await _context.Users.Where(x => x.Email == model.Email).FirstOrDefaultAsync();
-
+        var userExist = await _context.Users.Where(x => x.Email == model.Email.ToUpper()).FirstOrDefaultAsync();
         if (userExist != null) return new AuthResponse<AuthDTO>()
         {
             Data = null,
             ErrorMessage = $"User account with email {model.Email} already exist."
-        };
-
-        var userName = await _context.Users.Where(x => x.Email == model.Email).FirstOrDefaultAsync();
-
-        if (userName != null) return new AuthResponse<AuthDTO>()
-        {
-            Data = null,
-            ErrorMessage = $"User account with username {model.Email} already exist."
         };
 
         var userGuid = Guid.NewGuid();
@@ -164,6 +155,7 @@ public class AuthorizationService : IAuthorizationService
         }
 
         var tokens = _jwtUtils.GenerateJwtToken(Guid.Parse(idUser));
+        user.Refreshtoken = tokens.RefreshToken; await _context.SaveChangesAsync();
 
         return new AuthResponse<AuthDTO>()
         {
