@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Account\Exchange.Account.Context\Exchange.Account.Context.csproj" />
+    <ProjectReference Include="..\..\Data\Account\Exchange.Account.Entities\Exchange.Account.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
