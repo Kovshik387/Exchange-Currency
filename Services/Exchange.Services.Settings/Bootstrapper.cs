@@ -45,7 +45,7 @@ public static class Bootstrapper
     }
     public static IServiceCollection AddAuthSettings(this IServiceCollection services, IConfiguration configuration = null)
     {
-        var settings = Common.Settings.Settings.Load<AuthSettings>("Authorization", configuration);
+        var settings = Common.Settings.Settings.Load<AuthSettings>("Auth", configuration);
         services.AddSingleton(settings);
 
         return services;
