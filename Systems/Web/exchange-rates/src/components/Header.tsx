@@ -4,6 +4,10 @@ import axios from 'axios';
 import { addDays, format } from 'date-fns';
 import { useEffect } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import { AppDispatch, RootState } from "./../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, setAuth, setLoggout } from './../store/account.Slice';
+import { Link } from 'react-router-dom';
 
 const fetchCurrencyData = async () => {
     if (localStorage.getItem("dollar") == null ||
@@ -28,21 +32,34 @@ const fetchCurrencyData = async () => {
 }
 
 export default function Header() {
+    const username = useSelector((state: RootState) => state.account.username);
+    const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleLogout = async () => {
+        dispatch(logout());
+        dispatch(setLoggout(false));
+    };
+
     useEffect(() => {
         fetchCurrencyData();
-    })
+        const storedUsername = localStorage.getItem('name');
+        if (storedUsername) {
+            dispatch(setAuth(storedUsername));
+        }
+    }, [dispatch]);
 
     return (
         <Navbar style={HeaderStyle} expand="lg" fixed="top">
             <Container>
-                <Navbar.Brand href="/">Мониторинг курсов валют</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/">Мониторинг курсов валют</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="/daily">Курсы</Nav.Link>
-                        <Nav.Link href="/currency">Динамика</Nav.Link>
-                    </Nav>
-                    <Nav className="ms-auto" >
+                        <Nav.Link as={Link} to="/daily">
+                            Курсы
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/currency">Динамика</Nav.Link>
                         <div className="d-flex align-items-center p-1">
                             <img src="/volutes/dollar.svg" height={25} alt="Dollar Icon" />
                             <h6 style={{ paddingTop: "6px" }}>&nbsp;{localStorage.getItem("dollar")}</h6>
@@ -51,6 +68,30 @@ export default function Header() {
                             <img src="/volutes/euro.svg" height={25} alt="Euro Icon" />
                             <h6 style={{ paddingTop: "6px" }}>&nbsp;{localStorage.getItem("euro")}</h6>
                         </div>
+                    </Nav>
+                    <Nav className="ms-auto" >
+ 
+                    </Nav>
+                    <Nav>
+                        {
+                            !isLoggedIn ?
+                                <>
+                                    <Navbar.Collapse className="me-auto">
+                                        <Nav.Link as={Link} to="/signIn">Войти</Nav.Link>
+                                        <Nav.Link as={Link} to="/signUp">Регистрация</Nav.Link>
+                                    </Navbar.Collapse>
+                                </>
+                                :
+                                <>
+                                    <Navbar.Collapse className="me-auto">
+                                        <Navbar.Text>
+                                            Привет! {username} |
+                                        </Navbar.Text>
+                                        <Nav.Link as={Link} to={`/p/${localStorage.getItem("id")}`}>Профиль</Nav.Link>
+                                        <Nav.Link onClick={handleLogout}>Выйти</Nav.Link>
+                                    </Navbar.Collapse>
+                                </>
+                        }
                     </Nav>
                 </Navbar.Collapse>
             </Container>
@@ -63,3 +104,4 @@ const HeaderStyle: React.CSSProperties = {
     color: "black",
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
 }
+

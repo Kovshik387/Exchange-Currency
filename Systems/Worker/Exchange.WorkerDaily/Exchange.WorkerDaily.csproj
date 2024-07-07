@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>78250c7a-9153-4165-aaac-a1e4b6cf0990</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+	  <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+	  <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
+	  <PackageReference Include="Serilog.Expressions" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Services\Exchange.Services.EmailAction\Exchange.Services.EmailAction.csproj" />
+    <ProjectReference Include="..\..\..\Services\Exchange.Services.Logger\Exchange.Services.Logger.csproj" />
+    <ProjectReference Include="..\..\..\Services\Exchange.Services.RabbitMq\Exchange.Services.RabbitMq.csproj" />
+  </ItemGroup>
+
+</Project>

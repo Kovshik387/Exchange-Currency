@@ -8,7 +8,6 @@ interface CurrencyItemProps {
 
 export default function VoluteItem({ currency }: CurrencyItemProps) {
     const navigation = useNavigate();
-    console.log(currency);
     useEffect(() => {
 
     })

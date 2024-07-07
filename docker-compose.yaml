@@ -21,6 +21,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
   
+  rabbitmq:
+    container_name: rabbit
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "5673:5673"
+      - "15672:15672" 
+    networks:
+      - exchange-dev
+    volumes:      
+      - ./rabbitmq:/var/lib/rabbitmq
+
   redis:
     image: redis:latest
     container_name: redis
@@ -63,6 +75,50 @@ services:
         - "8020:8080"
     depends_on:
        - redis
+
+  auth_service:
+    image: ${DOCKER_REGISTRY-}exchange-auth
+    container_name: exchange-auth
+    build:
+        context: .
+        dockerfile: /Systems/Api/Exchange.ExchangeAccount/Dockerfile
+    networks:
+        - exchange-dev
+    ports:
+       - "8030:8080"
+    depends_on:
+       - postgres_db
+
+  rabbit_worker:
+    image: ${DOCKER_REGISTRY-}rabbit-worker
+    container_name: rabbit-worker
+    build:
+        context: .
+        dockerfile: /Systems/Worker/Exchange.Worker/Dockerfile
+    networks:
+        - exchange-dev
+    ports:
+       - "8070:8080"
+    depends_on:
+      - auth_service
+      - rabbitmq
+    restart: "always"  
+  
+  volute_worker:
+    image: ${DOCKER_REGISTRY-}volute-worker
+    container_name: volute-worker
+    build:
+        context: .
+        dockerfile: /Systems/Worker/Exchange.WorkerDaily/Dockerfile
+    networks:
+        - exchange-dev
+    ports:
+       - "8060:8080"
+    depends_on:
+      - auth_service
+      - cache_service
+      - rabbitmq
+    restart: "always"
 
 volumes:
   postgres-data:
