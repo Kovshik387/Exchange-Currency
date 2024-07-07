@@ -14,6 +14,8 @@ COPY ["Data/Account/Exchange.Account.Context/Exchange.Account.Context.csproj", "
 COPY ["Services/Exchange.Services.Settings/Exchange.Services.Settings.csproj", "Services/Exchange.Services.Settings/"]
 COPY ["Shared/Exchange.Common/Exchange.Common.csproj", "Shared/Exchange.Common/"]
 COPY ["Data/Account/Exchange.Account.Entities/Exchange.Account.Entities.csproj", "Data/Account/Exchange.Account.Entities/"]
+COPY ["Data/Account/Migrations/Exchange.Account.Context.Migrations.PgSql/Exchange.Account.Context.Migrations.PgSql.csproj", "Data/Account/Migrations/Exchange.Account.Context.Migrations.PgSql/"]
+COPY ["Services/Exchange.Services.Account/Exchange.Services.Account.csproj", "Services/Exchange.Services.Account/"]
 COPY ["Services/Exchange.Services.Authorization/Exchange.Services.Authorization.csproj", "Services/Exchange.Services.Authorization/"]
 RUN dotnet restore "./Systems/Api/Exchange.ExchangeAccount/Exchange.ExchangeAccount.csproj"
 COPY . .

@@ -3,6 +3,7 @@
 using Exchange.Services.Settings;
 using Exchange.ExchangeAccount.Configuration;
 using Exchange.Services.Authorization;
+using Exchange.Services.Account;
 
 public static class Bootstrapper
 {
@@ -13,7 +14,8 @@ public static class Bootstrapper
             .AddAuthSettings()
             .AddSwaggerSettings()
             .AddAppJwt()
-            .AddUserAccountService()
+            .AddAuthService()
+            .AddAccountService()
             ;
 
 

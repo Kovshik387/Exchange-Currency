@@ -12,6 +12,7 @@
   <ItemGroup>
 	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
 	<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -43,6 +44,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Data\Account\Exchange.Account.Context\Exchange.Account.Context.csproj" />
+		<ProjectReference Include="..\..\..\Data\Account\Migrations\Exchange.Account.Context.Migrations.PgSql\Exchange.Account.Context.Migrations.PgSql.csproj" />
+		<ProjectReference Include="..\..\..\Services\Exchange.Services.Account\Exchange.Services.Account.csproj" />
 		<ProjectReference Include="..\..\..\Services\Exchange.Services.Authorization\Exchange.Services.Authorization.csproj" />
 		<ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
   </ItemGroup>

@@ -52,7 +52,7 @@ public class AuthController : Controller
     }
 
     [HttpDelete]
-    [Route("Logout")]
+    [Route("logout")]
     [Authorize]
     public async Task<IActionResult> Logout(string refreshToken)
     {
@@ -65,5 +65,13 @@ public class AuthController : Controller
             _logger.LogError(ex.Message);
             return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
         }
+    }
+
+    [HttpPost]
+    [Route("refresh")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RefreshAccess(string refreshToken)
+    {
+        return Ok(await _authorizationService.GetAccessTokenAsync(refreshToken));
     }
 }

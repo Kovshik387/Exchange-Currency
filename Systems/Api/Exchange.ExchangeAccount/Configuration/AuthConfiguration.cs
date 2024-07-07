@@ -1,6 +1,7 @@
 ﻿using Exchange.Services.Settings.SettingsConfigure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 
 namespace Exchange.ExchangeAccount.Configuration;
 
@@ -21,6 +22,17 @@ public static class AuthConfiguration
                     ValidAudience = settings.Audience,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+
+                        context.Response.ContentType = "application/json";
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return context.Response.WriteAsync("{\"error\":\"Unauthorized access\"}");
+                    }
                 };
             });
 
