@@ -38,7 +38,6 @@ public static class UserConfiguration
                 .HasMaxLength(100)
                 .HasColumnName("patronymic");
             entity.Property(e => e.Refreshtoken)
-                .HasMaxLength(255)
                 .HasColumnName("refreshtoken");
             entity.Property(e => e.Surname)
                 .HasMaxLength(100)

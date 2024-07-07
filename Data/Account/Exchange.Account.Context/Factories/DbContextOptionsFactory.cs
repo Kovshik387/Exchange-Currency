@@ -1,12 +1,11 @@
 ﻿using Exchange.Account.Context.Context;
 using Microsoft.EntityFrameworkCore;
 using Exchange.Account.Context.Settings;
-using Microsoft.CodeAnalysis;
 
 namespace Exchange.Account.Context.Factories;
 public class DbContextOptionsFactory
 {
-    private const string migrationProjectPrefix = "Exchange.Account.Context.Migration.";
+    private const string migrationProjectPrefix = "Exchange.Account.Context.Migrations.";
 
     public static DbContextOptions<AccountDbContext> Create(string connStr, DbType dbType, bool detailedLogging = false)
     {

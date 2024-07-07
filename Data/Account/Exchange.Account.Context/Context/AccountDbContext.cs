@@ -17,6 +17,4 @@ public partial class AccountDbContext : DbContext
         modelBuilder.ConfigureUser();
         modelBuilder.ConfigureFavorite();
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder mo1delBuilder);
 }
