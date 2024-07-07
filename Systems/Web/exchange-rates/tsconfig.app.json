@@ -29,7 +29,9 @@
       "@functions/*": ["functions/*"],
       "@models/*": ["models/*"],
       "@stores/*": ["store/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@http/*": ["http/*"],
+      "@services/*": ["services/*"]
     }
   },
   "include": ["src"]
