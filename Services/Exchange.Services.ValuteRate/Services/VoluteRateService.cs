@@ -23,7 +23,7 @@ public class VoluteRateService : IVoluteRateService
 {
     private readonly string urlDaily = "http://www.cbr.ru/scripts/XML_daily.asp";
     private readonly string urlInterval = "http://www.cbr.ru/scripts/XML_dynamic.asp";
-    private readonly int _voluteTypeSize = 35;
+    private readonly int _voluteTypeSize = 42;
     private readonly RateDbContext _context;
     private readonly IMapper _mapper;
     private readonly ILogger<VoluteRateService> _logger;
@@ -57,8 +57,13 @@ public class VoluteRateService : IVoluteRateService
         }
         else
         {
+            if (data.Name == "No data")
+            {
+
+            }
+
             _logger.LogInformation($"count: {data.Volutes.Count}");
-            if (data.Volutes.Count <= _voluteTypeSize)
+            if (data.Volutes.Count < _voluteTypeSize)
             {
                 var result = await GetValuteDataFromApiAsync<RateValueDTO>(
                     date is null ? urlDaily : urlDaily + "?date_req=" + date.ToString()!.Replace(".", "/")
@@ -251,19 +256,19 @@ public class VoluteRateService : IVoluteRateService
             await _context.SaveChangesAsync();
         }
 
-        var voluteStub = new Volute
-        {
-            Idname = nameVal,
-            Nominal = 0,
-            Value = 0,
-            Vunitrate = 0,
-            Valcurs = data,
-            Charcode = "No data",
-            Name = "No data",
-            Numcode = 0,
-        };
+        //var voluteStub = new Volute
+        //{
+        //    Idname = nameVal,
+        //    Nominal = 0,
+        //    Value = 0,
+        //    Vunitrate = 0,
+        //    Valcurs = data,
+        //    Charcode = "No data",
+        //    Name = "No data",
+        //    Numcode = 0,
+        //};
 
-        _context.Volutes.Add(voluteStub);
+        //_context.Volutes.Add(voluteStub);
         await _context.SaveChangesAsync();
     }
 }
