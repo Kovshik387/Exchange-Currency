@@ -75,8 +75,8 @@ export default function AboutPage() {
                                 <strong>
                                     Git:
                                 </strong>
-                                <a>
-                                    &nbsp; https://github.com/Kovshik387/Exchange-Currency-DSR
+                                <a href="https://github.com/Kovshik387/Exchange-Currency-DSR" style={{ textDecoration: "none", color: "#8884d8" }}>
+                                    &nbsp;https://github.com/Kovshik387/Exchange-Currency-DSR
                                 </a>
                             </li>
                         </ul>
@@ -117,9 +117,6 @@ export default function AboutPage() {
                         )}
                     </Col>
                 </Row>
-
-
-
             </Container >
         </>
     )

@@ -18,7 +18,7 @@ export default function MainContent() {
       const response = await axios.get(Routes.ExchangeRates, {
         params: { date: format(date, 'dd.MM.yyyy') },
       });
-      setCurrencyData(response.data);
+      console.log(response.data);
       setFilteredData(response.data);
     } catch (error) {
       console.error('Error fetching currency data:', error);
