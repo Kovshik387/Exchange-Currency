@@ -2,7 +2,7 @@
 
 public class EmailModel
 {
-    public AccountModel accountModel { get; set; } = null!;
-    public List<VoluteModel> voluteModel { get; set; } = new();
-
+    public AccountModel AccountModel { get; set; } = null!;
+    public List<VoluteModel> VoluteModel { get; set; } = new();
+    public string Date { get; set; } = default!;
 }

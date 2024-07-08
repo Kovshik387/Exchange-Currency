@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Services\Exchange.Services.EmailAction\Exchange.Services.EmailAction.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Logger\Exchange.Services.Logger.csproj" />
+    <ProjectReference Include="..\..\..\Services\Exchange.Services.MessageSendler\Exchange.Services.MessageSendler.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.RabbitMq\Exchange.Services.RabbitMq.csproj" />
     <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
   </ItemGroup>

@@ -1,5 +1,7 @@
 ﻿using Exchange.Services.Logger;
+using Exchange.Services.MessageSendler;
 using Exchange.Services.RabbitMq;
+using Exchange.Services.Settings;
 using Exchange.Worker.TaskExecutor;
 
 namespace Exchange.Worker;
@@ -11,6 +13,8 @@ public static class Bootstrapper
         services
             .AddAppLogger()
             .AddRabbitMq()
+            .AddEmailSettings()
+            .AddMessageService()
             ;
         return services;
     }

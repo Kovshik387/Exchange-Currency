@@ -1,6 +1,0 @@
-@Exchange.ExchangeEmail_HostAddress = http://localhost:5235
-
-GET {{Exchange.ExchangeEmail_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
