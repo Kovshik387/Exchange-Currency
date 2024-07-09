@@ -1,5 +1,6 @@
 ﻿using Exchange.Services.Account.Data.DTO;
 using Exchange.Services.Account.Infrastructure;
+using Exchange.Services.Settings.SettingsConfigure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,9 @@ public class AccountController : Controller
     //test
     private readonly IAccountService _accountService;
     private readonly ILogger<AuthController> _logger;
-    public AccountController(IAccountService accountService, ILogger<AuthController> logger) => (_accountService,_logger) = (accountService,logger);
+    private readonly ApiKeySettings _settings;
+    public AccountController(IAccountService accountService, ILogger<AuthController> logger, ApiKeySettings settings) 
+        => (_accountService,_logger,_settings) = (accountService,logger,settings);
 
     [HttpGet]
     [Route("/api/account/{id}")]
@@ -80,6 +83,15 @@ public class AccountController : Controller
     [Route("/api/accounts")]
     public async Task<IActionResult> GetAccounts()
     {
-        return Ok(await _accountService.GetAccountsAcceptedAsync());
+        if (Request.Headers.TryGetValue("secret", out var key))
+        {
+            _logger.LogInformation($"{_settings.XAPIKEY}");
+            _logger.LogInformation($"{key}");
+            if (key.Equals(_settings.XAPIKEY))
+            {
+                return Ok(await _accountService.GetAccountsAcceptedAsync());
+            }
+        }
+        return Unauthorized("Header not found.");
     }
 }
