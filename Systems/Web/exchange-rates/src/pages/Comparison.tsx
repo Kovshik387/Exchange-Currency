@@ -228,8 +228,8 @@ export default function ComparisonPage() {
                                         dataKey={currency}
                                         name={currencyIdToName.get(currency) || currency}
                                         stroke={COLORS[index % COLORS.length]}
-                                        fillOpacity={1}
-                                        fill={`url(#colorValue${index})`}
+                                        fillOpacity={0}
+                                        fill={"#FFFFFFBF"}
                                     />
                                 )
                             ))}

@@ -124,7 +124,7 @@ services:
     image: ${DOCKER_REGISTRY-}frontend
     container_name: frontend
     build:
-      context: Systems/Web/exchange-rates/
+      context: .Systems/Web/exchange-rates/
       dockerfile: Dockerfile
     networks:
       - exchange-dev
