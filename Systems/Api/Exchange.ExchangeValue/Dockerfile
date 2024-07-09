@@ -4,7 +4,11 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-RUN apt-get update && apt-get install -y locales \
+RUN apt-get update && apt-get install -y gnupg \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138 \
+    && apt-get update \
+    && apt-get install -y locales \
     && locale-gen ru_RU.UTF-8 \
     && apt-get clean
 
