@@ -120,6 +120,17 @@ services:
       - rabbitmq
     restart: "always"
 
+  frontend:
+    image: ${DOCKER_REGISTRY-}frontend
+    container_name: frontend
+    build:
+      context: Systems/Web/exchange-rates/
+      dockerfile: Dockerfile
+    networks:
+      - exchange-dev
+    ports:
+      - "3000:3000"
+
 volumes:
   postgres-data:
   redis-data:  

@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export default function MainContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [currencyData, setCurrencyData] = useState<CurrencyMarket | null>();
+  const [currencyData] = useState<CurrencyMarket | null>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filteredData, setFilteredData] = useState<CurrencyMarket | null>(null);
 
