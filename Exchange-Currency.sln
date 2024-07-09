@@ -72,7 +72,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.WorkerDaily", "Sys
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.ExchangeEmail", "Systems\Api\Exchange.ExchangeEmail\Exchange.ExchangeEmail.csproj", "{79F1336D-B04F-4958-A4FD-C891729F0FBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.Services.MessageSendler", "Services\Exchange.Services.MessageSendler\Exchange.Services.MessageSendler.csproj", "{D161C8EB-94AE-4F2D-84F2-44F1CB78F35D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Services.MessageSendler", "Services\Exchange.Services.MessageSendler\Exchange.Services.MessageSendler.csproj", "{D161C8EB-94AE-4F2D-84F2-44F1CB78F35D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

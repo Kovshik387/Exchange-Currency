@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AuthResponse from '@models/AuthResponse';
+import defaultUri from '@utils/defaultRoute';
 
-export const API_AUTH_URL = `http://localhost:8030/api`;
+export const API_AUTH_URL = `${defaultUri}8030/api`;
 
 const $api = axios.create({
     baseURL: API_AUTH_URL,
