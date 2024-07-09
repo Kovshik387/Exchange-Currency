@@ -159,4 +159,5 @@ volumes:
   postgres-data:
   redis-data:
   www-html:
+    driver: local
   etc-letsencrypt:
