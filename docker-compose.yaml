@@ -5,6 +5,17 @@ networks:
     driver: bridge
 
 services:
+  certbot:
+    image: certbot/certbot
+    depends_on:
+    - nginx
+    container_name: certbot
+    volumes:
+    - etc-letsencrypt:/etc/letsencrypt
+    - www-html:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email nikitafantokin@yandex.ru --agree-tos --no-eff-email --staging -d exchangevolute.ru
+
+
   nginx:
     image: nginx
     container_name: nginx
@@ -146,4 +157,6 @@ services:
 
 volumes:
   postgres-data:
-  redis-data:  
+  redis-data:
+  www-html:
+  etc-letsencrypt:
