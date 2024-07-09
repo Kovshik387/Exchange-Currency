@@ -55,7 +55,7 @@ services:
     container_name: exchange-valute
     build:
         context: .
-        dockerfile: /Systems/Api/Exchange.ExchangeValue/Dockerfile
+        dockerfile: ./Systems/Api/Exchange.ExchangeValue/Dockerfile
     networks:
         - exchange-dev
     ports:
@@ -68,7 +68,7 @@ services:
     container_name: exchange-cache
     build:
         context: .
-        dockerfile: /Systems/Api/Exchange.ExchangeCache/Dockerfile
+        dockerfile: ./Systems/Api/Exchange.ExchangeCache/Dockerfile
     networks:
         - exchange-dev
     ports:
@@ -81,7 +81,7 @@ services:
     container_name: exchange-auth
     build:
         context: .
-        dockerfile: /Systems/Api/Exchange.ExchangeAccount/Dockerfile
+        dockerfile: ./Systems/Api/Exchange.ExchangeAccount/Dockerfile
     networks:
         - exchange-dev
     ports:
@@ -94,7 +94,7 @@ services:
     container_name: rabbit-worker
     build:
         context: .
-        dockerfile: /Systems/Worker/Exchange.Worker/Dockerfile
+        dockerfile: ./Systems/Worker/Exchange.Worker/Dockerfile
     networks:
         - exchange-dev
     ports:
@@ -109,7 +109,7 @@ services:
     container_name: volute-worker
     build:
         context: .
-        dockerfile: /Systems/Worker/Exchange.WorkerDaily/Dockerfile
+        dockerfile: ./Systems/Worker/Exchange.WorkerDaily/Dockerfile
     networks:
         - exchange-dev
     ports:
