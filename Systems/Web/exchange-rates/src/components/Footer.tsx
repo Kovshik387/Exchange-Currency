@@ -2,7 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 export default function Footer() {
     return (
-        <footer style={FooterStyle} className="p-3 fixed-bottom">
+        <footer style={FooterStyle} className="p-3">
             <Container>
                 <Row>
                     <Col className="text-center">
