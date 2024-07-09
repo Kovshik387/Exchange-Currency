@@ -1,3 +1,3 @@
-export const defaultUri = "api/";
+export const defaultUri = "api/exchange/";
 
 export default defaultUri;
