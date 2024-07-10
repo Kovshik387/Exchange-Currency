@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export default function MainContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [currencyData] = useState<CurrencyMarket | null>();
+  const [currencyData,setCurrencyData] = useState<CurrencyMarket | null>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filteredData, setFilteredData] = useState<CurrencyMarket | null>(null);
 
@@ -19,6 +19,7 @@ export default function MainContent() {
         params: { date: format(date, 'dd.MM.yyyy') },
       });
       console.log(response.data);
+      setCurrencyData(response.data);
       setFilteredData(response.data);
     } catch (error) {
       console.error('Error fetching currency data:', error);

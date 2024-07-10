@@ -59,6 +59,7 @@ public class RabbitMq : IRabbitMq, IDisposable
 
     private void Connect()
     {
+        Console.WriteLine(_rabbitMqSettings.Uri);
         lock (_lock)
         {
             if (connection?.IsOpen ?? false)

@@ -1,6 +1,6 @@
 import './App.css'
 import Header from '@components/Header'
-import Footer from '@components/Footer'
+// import Footer from '@components/Footer'
 import MainContent from '@components/MainContent'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AboutPage from '@pages/About';
@@ -58,9 +58,9 @@ const App: React.FC = () => {
               ))}
             </Routes>
           </main>
-          <footer>
-            <Footer />
-          </footer>
+          {/* <footer> */}
+            {/* <Footer /> */}
+          {/* </footer> */}
         </Router>
       </Provider>
     </>

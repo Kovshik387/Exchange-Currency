@@ -73,10 +73,10 @@ export default function AboutPage() {
                             </li>
                             <li>
                                 <strong>
-                                    Git:
+                                    Исходные файлы:
                                 </strong>
                                 <a href="https://github.com/Kovshik387/Exchange-Currency-DSR" style={{ textDecoration: "none", color: "#8884d8" }}>
-                                    &nbsp;https://github.com/Kovshik387/Exchange-Currency-DSR
+                                    &nbsp;Git
                                 </a>
                             </li>
                         </ul>

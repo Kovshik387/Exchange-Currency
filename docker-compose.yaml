@@ -5,17 +5,17 @@ networks:
     driver: bridge
 
 services:
-  certbot:
-    image: certbot/certbot
-    restart: unless-stopped
-    depends_on:
-    - nginx
-    container_name: certbot
-    volumes:
-    -  ./certbot/www:/var/www/certbot/:rw
-    - ./certbot/conf/:/etc/letsencrypt/:rw
-    networks:
-    - exchange-dev 
+  # certbot:
+  #   image: certbot/certbot
+  #   restart: unless-stopped
+  #   depends_on:
+  #   - nginx
+  #   container_name: certbot
+  #   volumes:
+  #   -  ./certbot/www:/var/www/certbot/:rw
+  #   - ./certbot/conf/:/etc/letsencrypt/:rw
+  #   networks:
+  #   - exchange-dev 
 
   nginx:
     image: nginx
@@ -30,8 +30,8 @@ services:
       - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
-    # depends_on:
-    #     - frontend
+    depends_on:
+        - frontend
 
   postgres_db:
     image: postgres:latest
@@ -65,7 +65,7 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    # command: ["redis-server","--appendonly","yes"]
+    command: ["redis-server","--appendonly","yes"]
     networks:
       - exchange-dev
     deploy:
