@@ -6,7 +6,7 @@ networks:
 
 services:
   certbot:
-    image: certbot:certbot
+    image: certbot/certbot
     restart: unless-stopped
     depends_on:
     - nginx
