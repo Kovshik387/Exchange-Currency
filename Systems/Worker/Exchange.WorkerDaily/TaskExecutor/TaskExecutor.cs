@@ -12,8 +12,8 @@ public class TaskExecutor : BackgroundService
     private readonly IRabbitMq _rabbitMq;
     private readonly HttpClient _httpClient;
     private readonly ApiKeySettings _settings;
-    private static Uri _accountUri = new Uri("http://auth_service:8030/api/accounts");
-    private static string _voluteUrl = "http://valute_service:8020/api/exchange/exchange-rates?date=";
+    private static Uri _accountUri = new Uri("http://auth_service:8080/api/accounts");
+    private static string _voluteUrl = "http://valute_service:8080/api/exchange/exchange-rates?date=";
     public TaskExecutor(IAppLogger logger, IRabbitMq rabbitMq, ApiKeySettings settings)
     {
         _logger = logger;
