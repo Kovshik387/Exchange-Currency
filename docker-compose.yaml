@@ -29,8 +29,8 @@ services:
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
-    depends_on:
-        - frontend
+    # depends_on:
+    #     - frontend
 
   postgres_db:
     image: postgres:latest
