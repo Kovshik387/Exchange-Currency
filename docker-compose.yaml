@@ -15,7 +15,6 @@ services:
     - www-html:/var/www/html
     command: certonly --webroot --webroot-path=/var/www/html --email nikitafantokin@yandex.ru --agree-tos --no-eff-email -d exchangevolute.ru
 
-
   nginx:
     image: nginx
     container_name: nginx
@@ -26,8 +25,8 @@ services:
     -  exchange-dev
     volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    - etc-letsencrypt:/etc/letsencrypt
-    - www-html:/var/www/html 
+    - ./deploy/default.conf:/etc/nginx/sites-available/default
+    - ./letsencrypt:/etc/letsencrypt
     depends_on:
         - frontend
 
