@@ -27,7 +27,7 @@ services:
     networks: 
     -  exchange-dev
     volumes:
-      - ./nginx/:/etc/nginx/conf.d/:ro
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
     depends_on:
         - frontend
