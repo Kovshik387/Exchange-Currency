@@ -59,7 +59,7 @@ const App: React.FC = () => {
             </Routes>
           </main>
           <footer>
-            <Footer />
+            {/* <Footer /> */}
           </footer>
         </Router>
       </Provider>
