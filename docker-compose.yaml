@@ -6,13 +6,14 @@ networks:
 
 services:
   certbot:
-    image: certbot/certbot
+    image: certbot:latest
     restart: unless-stopped
     depends_on:
     - nginx
     container_name: certbot
     volumes:
-    -  ./certbot/www:/var/www/certbot/:ro
+    -  ./certbot/www:/var/www/certbot/:rw
+    - ./certbot/conf/:/etc/letsencrypt/:rw
     networks:
     - exchange-dev 
 
