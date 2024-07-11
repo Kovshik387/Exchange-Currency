@@ -37,7 +37,7 @@
 
 ## Архитектура приложения
 
-![Архитектура](docs/DSR.drawio.png)
+![Архитектура](docs/architecture.png.png)
 
 - **ValueService** - получение данных о валютах с cbr.ru
 - **CacheService** - кеширование данных с `ValueService`
