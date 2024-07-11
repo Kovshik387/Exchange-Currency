@@ -23,7 +23,7 @@
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
   </ItemGroup>
-
+    
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\Rate\Exchange.Context\Exchange.Context.csproj" />
     <ProjectReference Include="..\..\..\Data\Rate\Exchange.Entities\Exchange.Entities.csproj" />

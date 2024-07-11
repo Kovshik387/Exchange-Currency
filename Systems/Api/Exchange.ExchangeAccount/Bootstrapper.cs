@@ -12,6 +12,7 @@ public static class Bootstrapper
         services.AddMainSettings()
             .AddLogSettings()
             .AddAuthSettings()
+            .AddApiKeySettings()
             .AddSwaggerSettings()
             .AddAppJwt()
             .AddAuthService()

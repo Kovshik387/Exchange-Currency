@@ -43,6 +43,7 @@ export default function VoluteDetailsPage() {
             const response = await axios.get(Routes.ExchangeRate, {
                 params: { date1: date1, date2: date2, name: name },
             });
+            console.log(response);
             setDataRate(response.data);
             setSortedData(response.data,);
         } catch (error) {

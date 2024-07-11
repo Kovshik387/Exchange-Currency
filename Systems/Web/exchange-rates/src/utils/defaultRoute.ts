@@ -1,3 +1,3 @@
-export const defaultUri = "http://localhost:";
+export const defaultUri = "/api/";
 
 export default defaultUri;

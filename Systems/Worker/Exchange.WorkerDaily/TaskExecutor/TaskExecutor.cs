@@ -1,6 +1,7 @@
 ﻿using Exchange.Services.EmailAction.Data;
 using Exchange.Services.Logger.Logger;
 using Exchange.Services.RabbitMq.Infrastructure;
+using Exchange.Services.Settings.SettingsConfigure;
 using Newtonsoft.Json;
 
 namespace Exchange.WorkerDaily.TaskExecutor;
@@ -10,12 +11,14 @@ public class TaskExecutor : BackgroundService
     private readonly IAppLogger _logger;
     private readonly IRabbitMq _rabbitMq;
     private readonly HttpClient _httpClient;
+    private readonly ApiKeySettings _settings;
     private static Uri _accountUri = new Uri("http://host.docker.internal:8030/api/accounts");
-    private static string _voluteUrl = "http://host.docker.internal:8020/exchange-rates?date=";
-    public TaskExecutor(IAppLogger logger, IRabbitMq rabbitMq)
+    private static string _voluteUrl = "http://host.docker.internal:8020/api/exchange/exchange-rates?date=";
+    public TaskExecutor(IAppLogger logger, IRabbitMq rabbitMq, ApiKeySettings settings)
     {
         _logger = logger;
         _rabbitMq = rabbitMq;
+        _settings = settings;
         _httpClient = new HttpClient();
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,7 +44,10 @@ public class TaskExecutor : BackgroundService
                     return;
                 }
 
-                var responseAccount = await _httpClient.GetAsync(_accountUri);
+                var requestAccount = new HttpRequestMessage(HttpMethod.Get, _accountUri);
+                requestAccount.Headers.Add("secret", _settings.XAPIKEY);
+
+                var responseAccount = await _httpClient.SendAsync(requestAccount);
                 if (!responseAccount.IsSuccessStatusCode)
                 {
                     _logger.Fatal("Api Account is not working");

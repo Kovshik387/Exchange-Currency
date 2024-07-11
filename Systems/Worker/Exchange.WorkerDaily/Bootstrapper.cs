@@ -1,5 +1,6 @@
 ﻿using Exchange.Services.Logger;
 using Exchange.Services.RabbitMq;
+using Exchange.Services.Settings;
 
 namespace Exchange.WorkerDaily;
 
@@ -9,6 +10,7 @@ public static class Bootstrapper
     {
         services
             .AddAppLogger()
+            .AddApiKeySettings()
             .AddRabbitMq()
             ;
         return services;
