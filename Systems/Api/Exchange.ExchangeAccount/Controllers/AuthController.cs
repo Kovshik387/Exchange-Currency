@@ -7,9 +7,10 @@ namespace Exchange.ExchangeAccount.Controllers;
 [Route("/api/auth")]
 public class AuthController : Controller
 {
-    private readonly Services.Authorization.Infrastructure.IAuthorizationService _authorizationService;
+    private readonly Exchange.Services.Authorization.Infrastructure.IAuthorizationService _authorizationService;
     private readonly ILogger<AuthController> _logger;
-    public AuthController(Services.Authorization.Infrastructure.IAuthorizationService authorizationService, ILogger<AuthController> logger) =>
+    // ReSharper disable once ConvertToPrimaryConstructor
+    public AuthController(Exchange.Services.Authorization.Infrastructure.IAuthorizationService authorizationService, ILogger<AuthController> logger) =>
         (_authorizationService, _logger) = (authorizationService, logger);
     /// <summary>
     /// Регистрация нового пользователя с выдачей access и refresh токенов
@@ -18,13 +19,13 @@ public class AuthController : Controller
     [HttpPost]
     [Route("signUp")]
     [AllowAnonymous]
-    [ProducesResponseType(type:typeof(SignUpDTO), statusCode: StatusCodes.Status200OK)]
+    [ProducesResponseType(type:typeof(SignUpDto), statusCode: StatusCodes.Status200OK)]
     [ProducesResponseType(type: typeof(string), statusCode: StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> SignUp([FromBody] SignUpDTO signUpDTO)
+    public async Task<IActionResult> SignUp([FromBody] SignUpDto signUpDto)
     {
         try
         {
-            return Ok(await _authorizationService.SignUpAsync(signUpDTO));
+            return Ok(await _authorizationService.SignUpAsync(signUpDto));
         }
         catch (Exception ex)
         {
@@ -32,17 +33,21 @@ public class AuthController : Controller
             return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
         }
     }
-
+    /// <summary>
+    /// Аутентификация и идентификация пользователя
+    /// </summary>
+    /// <param name="signInDto"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("signIn")]
     [AllowAnonymous]
-    [ProducesResponseType(type: typeof(SignInDTO), statusCode: StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(SignInDto), statusCode: StatusCodes.Status200OK)]
     [ProducesResponseType(type: typeof(string), statusCode: StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> SignIn([FromBody] SignInDTO signInDTO)
+    public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto)
     {
         try
         {
-            return Ok(await _authorizationService.SignInAsync(signInDTO));
+            return Ok(await _authorizationService.SignInAsync(signInDto));
         }
         catch (Exception ex)
         {
@@ -50,7 +55,11 @@ public class AuthController : Controller
             return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
         }
     }
-
+    /// <summary>
+    /// Удаление refreshToken'а у пользователя, выход из аккаунта на устройстве
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
     [HttpDelete]
     [Route("logout")]
     [Authorize]
@@ -66,7 +75,11 @@ public class AuthController : Controller
             return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
         }
     }
-
+    /// <summary>
+    /// Выдача нового accessTokne'а на основе refreshToken'а 
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("refresh")]
     [AllowAnonymous]

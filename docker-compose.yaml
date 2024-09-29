@@ -87,9 +87,9 @@ services:
     depends_on:
        - redis
 
-  auth_service:
-    image: ${DOCKER_REGISTRY-}exchange-auth
-    container_name: exchange-auth
+  account_service:
+    image: ${DOCKER_REGISTRY-}exchange-account
+    container_name: exchange-account
     build:
         context: .
         dockerfile: ./Systems/Api/Exchange.ExchangeAccount/Dockerfile
@@ -97,6 +97,19 @@ services:
         - exchange-dev
     ports:
        - "8030:8080"
+    depends_on:
+       - postgres_db
+
+  auth_service:
+    image: ${DOCKER_REGISTRY-}exchange-auth
+    container_name: exchange-auth
+    build:
+        context: .
+        dockerfile: ./Systems/Api/Exchange.ExchangeAuth/Dockerfile
+    networks:
+        - exchange-dev
+    ports:
+       - "8040:8080"
     depends_on:
        - postgres_db
 

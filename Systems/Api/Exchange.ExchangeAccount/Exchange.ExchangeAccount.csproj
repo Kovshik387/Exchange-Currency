@@ -10,6 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.40.0" PrivateAssets="All" />
+	<PackageReference Include="Google.Protobuf" Version="3.19.1" />
 	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
 	<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
@@ -49,5 +52,9 @@
 		<ProjectReference Include="..\..\..\Services\Exchange.Services.Authorization\Exchange.Services.Authorization.csproj" />
 		<ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="..\..\..\Shared\Exchange.Common\Protos\account.proto" GrpcServices="Server" />
+	</ItemGroup>
 
 </Project>

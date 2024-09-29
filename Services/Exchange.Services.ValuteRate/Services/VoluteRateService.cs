@@ -90,6 +90,7 @@ public class VoluteRateService : IVoluteRateService
     {
         var existingRecords = await _context.Volutes
             .Where(v => v.Idname.Equals(nameVal) && v.Valcurs.Date >= date1 && v.Valcurs.Date <= date2)
+            .Include(volute => volute.Valcurs)
             .ToListAsync();
 
         var existingDates = existingRecords.Select(v => v.Valcurs.Date).ToHashSet(); 

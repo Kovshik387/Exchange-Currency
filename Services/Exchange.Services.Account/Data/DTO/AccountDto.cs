@@ -1,6 +1,6 @@
 ﻿namespace Exchange.Services.Account.Data.DTO;
 
-public class AccountDTO
+public class AccountDto
 {
     public Guid Id { get; set; }
 
@@ -13,5 +13,5 @@ public class AccountDTO
     public string Email { get; set; } = null!;
     public bool Accept { get; set; }
 
-    public ICollection<FavoriteDTO> Favorites { get; set; } = null!;
+    public ICollection<FavoriteDto> Favorites { get; set; } = null!;
 }

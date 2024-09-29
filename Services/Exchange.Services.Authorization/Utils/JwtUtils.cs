@@ -1,5 +1,4 @@
-﻿using Exchange.Account.Context.Context;
-using Exchange.Services.Authorization.Infrastructure;
+﻿using Exchange.Services.Authorization.Infrastructure;
 using Exchange.Services.Settings.SettingsConfigure;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -11,14 +10,13 @@ namespace Exchange.Services.Authorization.Utils;
 
 public class JwtUtils : IJwtUtils
 {
-    private readonly AccountDbContext _context;
     private readonly AuthSettings _settings;
     private readonly ILogger<JwtUtils> _logger;
 
-    public JwtUtils(AccountDbContext context, AuthSettings settings, ILogger<JwtUtils> logger) => 
-        (_context, _settings, _logger) = (context, settings, logger);
+    public JwtUtils( AuthSettings settings, ILogger<JwtUtils> logger) => 
+        (_settings, _logger) = (settings, logger);
 
-    public AuthDTO GenerateJwtToken(Guid guid)
+    public AuthDto GenerateJwtToken(Guid guid)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -44,26 +42,21 @@ public class JwtUtils : IJwtUtils
                 SecurityAlgorithms.HmacSha256Signature),
         };
 
-        var authDTO = new AuthDTO()
+        var authDto = new AuthDto()
         {
             Id = guid,
             AccessToken = tokenHandler.WriteToken(tokenHandler.CreateToken(accessTokenDescriptor)),
             RefreshToken = tokenHandler.WriteToken(tokenHandler.CreateToken(refreshTokenDescriptor))
         };
 
-        return authDTO;
+        return authDto;
     }
 
     public string? GetExpireTime(string refreshToken)
     {
         var claims = GetClaimsFromToken(refreshToken);
 
-        if (claims is null)
-        {
-            return null;
-        }
-
-        return claims.Claims.First(x => x.Type.Equals("exp")).Value;
+        return claims?.Claims.First(x => x.Type.Equals("exp")).Value;
     }
 
     public string? GetUserByRefreshToken(string refreshToken)

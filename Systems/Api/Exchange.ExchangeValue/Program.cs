@@ -27,10 +27,11 @@ var app = builder.Build();
 
 app.UseAppSwagger();
 
-app.MapGrpcService<ValuteService>();
 app.UseAppCors();
 app.UseHttpsRedirection();
 app.MapControllers();
+
+app.MapGrpcService<ValuteService>();
 
 DbInitializer.Execute(app.Services);
 

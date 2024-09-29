@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Exchange.Services.Authorization.Services.Validators;
 
-public class SignUpValidator : AbstractValidator<SignUpDTO>
+public class SignUpValidator : AbstractValidator<SignUpDto>
 {
     public SignUpValidator()
     {

@@ -8,6 +8,10 @@
 
 	
    <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.40.0" PrivateAssets="All" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
@@ -16,8 +20,15 @@
   </ItemGroup>	
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\Account\Exchange.Account.Context\Exchange.Account.Context.csproj" />
+    <ProjectReference Include="..\..\Data\Account\Exchange.Account.Entities\Exchange.Account.Entities.csproj" />
+    <ProjectReference Include="..\..\Data\Authorization\Exchange.Authorization.Context\Exchange.Authorization.Context.csproj" />
+    <ProjectReference Include="..\..\Data\Authorization\Exchange.Authorization.Entities\Exchange.Authorization.Entities.csproj" />
+    <ProjectReference Include="..\..\Data\Authorization\Migrations\Exchange.Authorization.Context.Migrations.PgSql\Exchange.Authorization.Context.Migrations.PgSql.csproj" />
     <ProjectReference Include="..\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
   </ItemGroup>
 
+    <ItemGroup>
+        <Protobuf Include="..\..\Shared\Exchange.Common\Protos\account.proto" GrpcServices="Client" />
+    </ItemGroup>
+    
 </Project>

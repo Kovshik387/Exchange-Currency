@@ -14,12 +14,8 @@ public partial class User
     public string? Patronymic { get; set; }
 
     public string Email { get; set; } = null!;
-
-    public string Passwordhash { get; set; } = null!;
-
-    public string? Refreshtoken { get; set; }
-
     public bool Accept { get; set; }
-
+    public Guid  IdPhoto { get; set; }
+    
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 }

@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Exchange.Account.Context.Configuration;
 
@@ -31,17 +26,15 @@ public static class UserConfiguration
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
-            entity.Property(e => e.Passwordhash)
-                .HasMaxLength(255)
-                .HasColumnName("passwordhash");
             entity.Property(e => e.Patronymic)
                 .HasMaxLength(100)
                 .HasColumnName("patronymic");
-            entity.Property(e => e.Refreshtoken)
-                .HasColumnName("refreshtoken");
             entity.Property(e => e.Surname)
                 .HasMaxLength(100)
                 .HasColumnName("surname");
+            entity.Property(e => e.IdPhoto)
+                .HasMaxLength(255)
+                .HasColumnName("id_photo");
         });
     }
 }

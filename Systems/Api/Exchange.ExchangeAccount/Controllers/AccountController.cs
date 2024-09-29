@@ -9,7 +9,6 @@ namespace Exchange.ExchangeAccount.Controllers;
 [Route("/api/account")]
 public class AccountController : Controller
 {
-    //test
     private readonly IAccountService _accountService;
     private readonly ILogger<AuthController> _logger;
     private readonly ApiKeySettings _settings;
@@ -34,11 +33,11 @@ public class AccountController : Controller
     [HttpPost]
     [Authorize]
     [Route("add-volute")]
-    public async Task<IActionResult> AddFavoriteVolute(string id, [FromBody] FavoriteDTO favoriteDTO)
+    public async Task<IActionResult> AddFavoriteVolute(string id, [FromBody] FavoriteDto favoriteDto)
     {
         try
         {
-            return Ok(await _accountService.AddFavoriteVoluteAsync(Guid.Parse(id),favoriteDTO));
+            return Ok(await _accountService.AddFavoriteVoluteAsync(Guid.Parse(id),favoriteDto));
         }
         catch (Exception ex)
         {
@@ -50,11 +49,11 @@ public class AccountController : Controller
     [HttpDelete]
     [Authorize]
     [Route("delete-volute")]
-    public async Task<IActionResult> DeleteFavoriteVolute(string id, [FromBody] FavoriteDTO favoriteDTO)
+    public async Task<IActionResult> DeleteFavoriteVolute(string id, [FromBody] FavoriteDto favoriteDto)
     {
         try
         {
-            return Ok(await _accountService.DeleteFavoriteVoluteAsync(Guid.Parse(id), favoriteDTO));
+            return Ok(await _accountService.DeleteFavoriteVoluteAsync(Guid.Parse(id), favoriteDto));
         }
         catch (Exception ex)
         {
@@ -83,15 +82,13 @@ public class AccountController : Controller
     [Route("/api/accounts")]
     public async Task<IActionResult> GetAccounts()
     {
-        if (Request.Headers.TryGetValue("secret", out var key))
+        if (!Request.Headers.TryGetValue("secret", out var key)) return Unauthorized("Header not found.");
+        
+        if (key.Equals(_settings.XAPIKEY))
         {
-            _logger.LogInformation($"{_settings.XAPIKEY}");
-            _logger.LogInformation($"{key}");
-            if (key.Equals(_settings.XAPIKEY))
-            {
-                return Ok(await _accountService.GetAccountsAcceptedAsync());
-            }
+            return Ok(await _accountService.GetAccountsAcceptedAsync());
         }
+        
         return Unauthorized("Header not found.");
     }
 }

@@ -16,7 +16,7 @@ public class CacheService : ICacheService
     private readonly ApiEndPointSettings _endPointSettings;
     private readonly ILogger<CacheService> _logger;
     private readonly JsonSerializerSettings _serializerSettings;
-    private readonly string _dateFormatString = "dd.MM.yyyy";
+    private const string DateFormatString = "dd.MM.yyyy";
 
     public CacheService(IDistributedCache distributedCache, RedisSettings redisSettings, ApiEndPointSettings pointSettings, ILogger<CacheService> logger)
     {
@@ -27,20 +27,20 @@ public class CacheService : ICacheService
         _serializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            DateFormatString = _dateFormatString
+            DateFormatString = DateFormatString
         };
     }
     public async Task<DailyValuteResponse?> GetDataByDateAsync(string date)
     {
-        return await GetDataVolute<DailyValuteResponse>(date,
+        return await GetDataVolute(date,
             async () => await GetDailyValuteFromSource(date),
             TimeSpan.FromMinutes(_redisSettings.CacheSmallData));
     }
 
     public async Task<DynamicValueResponse?> GetDataByDatesAsync(string date1, string date2, string name)
     {
-        string searchString = $"{date1} {date2} {name}";
-        return await GetDataVolute<DynamicValueResponse>(searchString,
+        var searchString = $"{date1} {date2} {name}";
+        return await GetDataVolute(searchString,
             async () => await GetDynamicValueFromSource(date1, date2, name),
             TimeSpan.FromMinutes(_redisSettings.CacheLargeData));
     }
@@ -48,7 +48,7 @@ public class CacheService : ICacheService
     private async Task<TData?> GetDataVolute<TData>(string cacheKey, Func<Task<TData>> getDataFromSource, TimeSpan cacheDuration)
     {
         TData? result = default;
-        string? requestString = await _cache.GetStringAsync(cacheKey);
+        var requestString = await _cache.GetStringAsync(cacheKey);
 
         if (requestString is not null)
         {

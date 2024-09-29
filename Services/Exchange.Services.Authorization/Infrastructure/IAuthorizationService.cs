@@ -12,13 +12,13 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="signIn"></param>
     /// <returns></returns>
-    public Task<AuthResponse<AuthDTO>> SignInAsync(SignInDTO model);
+    public Task<AuthResponse<AuthDto>> SignInAsync(SignInDto model);
     /// <summary>
     /// Регистрация нового пользователя
     /// </summary>
     /// <param name="signUp"></param>
     /// <returns></returns>
-    public Task<AuthResponse<AuthDTO>> SignUpAsync(SignUpDTO model);
+    public Task<AuthResponse<AuthDto>> SignUpAsync(SignUpDto model);
     /// <summary>
     /// Проверка на наличие пользователей в БД 
     /// </summary>
@@ -29,7 +29,7 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="refreshToken"></param>
     /// <returns></returns>
-    public Task<AuthResponse<AuthDTO>> GetAccessTokenAsync(string refreshToken);
+    public Task<AuthResponse<AuthDto>> GetAccessTokenAsync(string refreshToken);
     /// <summary>
     /// Удаление refresh-токена у пользователя
     /// </summary>

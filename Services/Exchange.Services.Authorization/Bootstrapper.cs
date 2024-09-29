@@ -10,5 +10,4 @@ public static class Bootstrapper
         services.AddScoped<IAuthorizationService, AuthorizationService>();
         return services;
     }
-
 }

@@ -4,6 +4,7 @@ using Exchange.ExchangeAccount.Configuration;
 using Exchange.ExchangeAccount;
 using Exchange.Account.Context.Setup;
 using Exchange.Account.Context;
+using Exchange.ExchangeAccount.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.AddAppLogger(mainSettings, logSettings);
 builder.Services.AddAppCors();
 builder.Services.AddAppDbContext(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddGrpc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAppAuth(authSettings);
 builder.Services.AddAppSwagger(mainSettings, swaggerSettings, authSettings);
@@ -33,6 +35,8 @@ app.UseAppAuth();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.MapGrpcService<AccountService>();
 
 DbInitializer.Execute(app.Services);
 

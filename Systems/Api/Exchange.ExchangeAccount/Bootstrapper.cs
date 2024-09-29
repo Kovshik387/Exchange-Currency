@@ -19,8 +19,6 @@ public static class Bootstrapper
             .AddAccountService()
             ;
 
-
-
         return services;
     }
 }

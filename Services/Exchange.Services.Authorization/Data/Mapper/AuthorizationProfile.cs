@@ -10,7 +10,7 @@ public class AuthorizationProfile : Profile
     public AuthorizationProfile()
     {
         CreateMap<User, AuthorizationResponse>().ReverseMap();
-        CreateMap<AuthorizationResponse, SignInDTO>().ReverseMap();
-        CreateMap<AuthDTO, User>().ReverseMap();
+        CreateMap<AuthorizationResponse, SignInDto>().ReverseMap();
+        CreateMap<AuthDto, User>().ReverseMap();
     }
 }
