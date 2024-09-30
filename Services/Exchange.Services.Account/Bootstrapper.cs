@@ -11,6 +11,5 @@ namespace Exchange.Services.Account
             services.AddTransient<IAccountService, AccountService>();
             return services;
         }
-
     }
 }
