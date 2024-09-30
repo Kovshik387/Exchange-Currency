@@ -2,9 +2,9 @@
 
 public partial class RefreshToken
 {
-    public int Id { get; set; }
-    public string Token { get; set; }  
-    public string Device { get; set; }
+    public Guid Id { get; set; }
+    public string Token { get; set; } = string.Empty;
+    public string Device { get; set; } = string.Empty;
     
     public Guid? Idaccount { get; set; }
     
