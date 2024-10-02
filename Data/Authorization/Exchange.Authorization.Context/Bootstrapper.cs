@@ -14,7 +14,7 @@ public static class Bootstrapper
         services.AddSingleton(settings);
 
         var dbInitDelegate = DbContextOptionsFactory.Configure(settings.ConnectionString, settings.DatabaseType, true);
-
+        
         services.AddDbContextFactory<AuthorizationDbContext>(dbInitDelegate);
         return services;
     }

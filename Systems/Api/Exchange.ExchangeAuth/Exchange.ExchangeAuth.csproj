@@ -25,15 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Data\Authorization\Migrations\Exchange.Authorization.Context.Migrations.PgSql\Exchange.Authorization.Context.Migrations.PgSql.csproj" />
       <ProjectReference Include="..\..\..\Services\Exchange.Services.Authorization\Exchange.Services.Authorization.csproj" />
       <ProjectReference Include="..\..\..\Services\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
     </ItemGroup>
-
-	<ItemGroup>
-		<Protobuf Include="..\..\..\Shared\Exchange.Common\Protos\account.proto" GrpcServices="" />
-	</ItemGroup>
-
-
 
 </Project>

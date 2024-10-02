@@ -144,21 +144,34 @@ public class AuthorizationService : IAuthorizationService
             return new AuthResponse<AuthDto>()
             {
                 Data = null,
-                ErrorMessage = "Failed to create account. Try again later"
+                ErrorMessage = $"Failed to create account. Try again later"
             };
         }
-        
-        account.Refreshes.Add(new RefreshToken()
-        {
-            Token = token.RefreshToken,
-            Device = model.Device,
-        });
-        var result = await _context.Accounts.AddAsync(account); 
-        
-        await _context.SaveChangesAsync();
 
-        if (result is null)
-            throw new Exception($"Creating user account is wrong.");
+        try
+        {
+            var refresh = new RefreshToken()
+            {
+                Device = model.Device,
+                Token = token.RefreshToken,
+                Idaccount = account.Id,
+                Id = Guid.NewGuid(),
+            };
+            
+            _context.Accounts.Add(account); 
+            _context.RefreshTokens.Add(refresh);
+            await _context.SaveChangesAsync();
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("===========================================");
+            _logger.LogError(ex, ex.Message);
+            _logger.LogError("===========================================");
+        }
+        //
+        // if (result is null)
+        //     throw new Exception($"Creating user account is wrong.");
 
         return new AuthResponse<AuthDto>()
         {

@@ -3,10 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exchange.Authorization.Context.Factories;
 
-public class DbContextFactory(DbContextOptions<AuthorizationDbContext> options)
+public class DbContextFactory
 {
+    private readonly DbContextOptions<AuthorizationDbContext> _options;
+    public DbContextFactory(DbContextOptions<AuthorizationDbContext> options)
+    {
+        _options = options;
+    }
     public AuthorizationDbContext Create()
     {
-        return new AuthorizationDbContext(options);
+        return new AuthorizationDbContext(_options);
     }
 }

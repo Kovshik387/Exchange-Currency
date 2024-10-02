@@ -6,7 +6,7 @@ namespace Exchange.Authorization.Context.Factories;
 
 public class DbContextOptionsFactory
 {
-    private const string migrationProjectPrefix = "Exchange.Authorization.Context.Migrations.";
+    private const string MigrationProjectPrefix = "Exchange.Authorization.Context.Migrations.";
 
     public static DbContextOptions<AuthorizationDbContext> Create(string connStr, DbType dbType, bool detailedLogging = false)
     {
@@ -37,7 +37,7 @@ public class DbContextOptionsFactory
                         opts => opts
                             .CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)
                             .MigrationsHistoryTable("_migrations")
-                            .MigrationsAssembly($"{migrationProjectPrefix}{DbType.PgSql}")
+                            .MigrationsAssembly($"{MigrationProjectPrefix}{DbType.PgSql}")
                     );
                     break;
 

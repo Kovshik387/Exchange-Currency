@@ -26,7 +26,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AccountDbC
         else
             throw new Exception($"Unsupported provider: {provider}");
 
-        var options = DbContextOptionsFactory.Create(connStr, dbType, false);
+        var options = DbContextOptionsFactory.Create(connStr!, dbType, false);
         var factory = new DbContextFactory(options);
         var context = factory.Create();
 

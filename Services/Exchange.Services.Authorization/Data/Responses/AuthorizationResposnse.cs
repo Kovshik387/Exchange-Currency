@@ -1,4 +1,4 @@
-﻿using Exchange.Account.Context;
+﻿// using Exchange.Account.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ public class AuthorizationResponse //<T>
     public string Email { get; set; } = string.Empty;
 
     public string AccessToken { get; set; } = string.Empty;
-    public AuthorizationResponse(User user, string accessToken)
-    {
-        this.Id = user.Id; this.AccessToken = accessToken;
-        this.Email = user.Email; this.Name = user.Name;
-    }
+    // public AuthorizationResponse(User user, string accessToken)
+    // {
+    //     this.Id = user.Id; this.AccessToken = accessToken;
+    //     this.Email = user.Email; this.Name = user.Name;
+    // }
 }

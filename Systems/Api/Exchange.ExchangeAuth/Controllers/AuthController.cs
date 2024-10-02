@@ -1,4 +1,5 @@
-﻿using Exchange.Services.Authorization.Data.DTO;
+﻿using Exchange.Authorization.Context.Context;
+using Exchange.Services.Authorization.Data.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ public class AuthController : Controller
     [ProducesResponseType(type: typeof(string), statusCode: StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> SignUp([FromBody] SignUpDto signUpDto)
     {
+        signUpDto.Device = Request.Headers["User-Agent"].ToString();
         try
         {
             return Ok(await _authorizationService.SignUpAsync(signUpDto));
@@ -45,6 +47,7 @@ public class AuthController : Controller
     [ProducesResponseType(type: typeof(string), statusCode: StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto)
     {
+        signInDto.Device = Request.Headers["User-Agent"].ToString();
         try
         {
             return Ok(await _authorizationService.SignInAsync(signInDto));

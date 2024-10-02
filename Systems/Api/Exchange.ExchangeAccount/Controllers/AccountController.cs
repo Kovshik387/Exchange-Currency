@@ -10,9 +10,9 @@ namespace Exchange.ExchangeAccount.Controllers;
 public class AccountController : Controller
 {
     private readonly IAccountService _accountService;
-    private readonly ILogger<AuthController> _logger;
+    private readonly ILogger<AccountController> _logger;
     private readonly ApiKeySettings _settings;
-    public AccountController(IAccountService accountService, ILogger<AuthController> logger, ApiKeySettings settings) 
+    public AccountController(IAccountService accountService, ILogger<AccountController> logger, ApiKeySettings settings) 
         => (_accountService,_logger,_settings) = (accountService,logger,settings);
 
     [HttpGet]

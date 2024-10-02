@@ -15,7 +15,6 @@ public static class Bootstrapper
             .AddApiKeySettings()
             .AddSwaggerSettings()
             .AddAppJwt()
-            .AddAuthService()
             .AddAccountService()
             ;
 

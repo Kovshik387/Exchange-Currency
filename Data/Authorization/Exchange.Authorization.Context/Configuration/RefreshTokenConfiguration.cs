@@ -1,4 +1,5 @@
-﻿using Exchange.Authorization.Entities;
+﻿using Exchange.Authorization;
+using Exchange.Authorization.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Exchange.Authorization.Context.Configuration;
@@ -11,7 +12,7 @@ public static class RefreshTokenConfiguration
         {
             entity.HasKey(e => e.Id).HasName("refresh_pkey");
             
-            entity.ToTable("Refreshes");
+            entity.ToTable("refreshes");
             
             entity.Property(e => e.Device)
                 .HasMaxLength(255)
@@ -22,13 +23,17 @@ public static class RefreshTokenConfiguration
                 .HasColumnName("id");
             
             entity.Property(e => e.Token)
-                .HasMaxLength(255)
                 .HasColumnName("token");
             
             entity.Property(e => e.Device)
                 .HasMaxLength(255)
                 .HasColumnName("device");
             
+            entity.Property(e => e.Idaccount).HasColumnName("idaccount");
+            
+            entity.HasOne(d => d.IdAccountNavigation).WithMany(p => p.Refreshes)
+                .HasForeignKey(d => d.Idaccount)
+                .HasConstraintName("refresh_idaccount_fkey");
             //
             // entity.Property(e => e.Expires)
             //     .HasColumnType("expire");

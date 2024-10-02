@@ -20,9 +20,6 @@
   </ItemGroup>	
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\Account\Exchange.Account.Entities\Exchange.Account.Entities.csproj" />
-    <ProjectReference Include="..\..\Data\Authorization\Exchange.Authorization.Context\Exchange.Authorization.Context.csproj" />
-    <ProjectReference Include="..\..\Data\Authorization\Exchange.Authorization.Entities\Exchange.Authorization.Entities.csproj" />
     <ProjectReference Include="..\..\Data\Authorization\Migrations\Exchange.Authorization.Context.Migrations.PgSql\Exchange.Authorization.Context.Migrations.PgSql.csproj" />
     <ProjectReference Include="..\Exchange.Services.Settings\Exchange.Services.Settings.csproj" />
   </ItemGroup>

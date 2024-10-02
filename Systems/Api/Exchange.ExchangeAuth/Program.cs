@@ -4,6 +4,7 @@ using Exchange.ExchangeAuth.Configuration;
 using Exchange.Common.Settings;
 using Exchange.Services.Settings.SettingsConfigure;
 using Exchange.ExchangeAuth;
+using Exchange.Services.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +22,11 @@ builder.Services.AddGrpc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAppAuth(authSettings);
 builder.Services.AddAppSwagger(mainSettings, swaggerSettings, authSettings);
-builder.Services.RegisterService();
 builder.Services.AddAppAutoMappers();
 builder.Services.AddAppValidator();
+builder.Services.AddAuthService();
+
+builder.Services.RegisterService(builder.Configuration);
 
 var app = builder.Build();
 

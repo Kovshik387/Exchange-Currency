@@ -12,10 +12,9 @@ public static class Bootstrapper
             .AddLogSettings()
             .AddAuthSettings()
             .AddApiKeySettings()
+            .AddApiPathsSettings()
             .AddSwaggerSettings()
             .AddAppJwt()
-            .AddAuthService()
-            .AddAppCors()
             ;
 
         return services;

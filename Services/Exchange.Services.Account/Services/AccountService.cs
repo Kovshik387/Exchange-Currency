@@ -15,7 +15,8 @@ public class AccountService : IAccountService
     private readonly AccountDbContext _context;
     private readonly ILogger<AccountService> _logger;
     private readonly IMapper _mapper;
-    public AccountService(AccountDbContext context, ILogger<AccountService> logger, IMapper mapper) => (_context, _logger,_mapper) = (context, logger,mapper);
+    public AccountService(AccountDbContext context, ILogger<AccountService> logger, IMapper mapper) 
+        => (_context, _logger,_mapper) = (context, logger,mapper);
 
     public async Task<IList<AccountDto>> GetAccountsAcceptedAsync()
     {

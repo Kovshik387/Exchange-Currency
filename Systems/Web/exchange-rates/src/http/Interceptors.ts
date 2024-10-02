@@ -22,7 +22,7 @@ $api.interceptors.response.use((config) => {
         originalRequest._isRetry = true;
         try {
             console.log(localStorage.getItem("перед обновлением"))
-            const response = await axios.post<AuthResponse>(`${API_AUTH_URL}/auth/refresh?refreshToken=${localStorage.getItem("refreshToken")}`);
+            const response = await axios.post<AuthResponse>(`${API_AUTH_URL}auth/refresh?refreshToken=${localStorage.getItem("refreshToken")}`);
             console.log(response);
             localStorage.setItem('accessToken', response.data.data.accessToken);
             localStorage.setItem('refreshToken', response.data.data.refreshToken);

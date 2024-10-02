@@ -22,7 +22,7 @@ builder.Services.AddGrpc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAppAuth(authSettings);
 builder.Services.AddAppSwagger(mainSettings, swaggerSettings, authSettings);
-builder.Services.RegisterService();
+builder.Services.RegisterService(builder.Configuration);
 builder.Services.AddAppAutoMappers();
 builder.Services.AddAppValidator();
 

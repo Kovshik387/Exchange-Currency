@@ -11,12 +11,11 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Folder Include="Migrations\" />
+      <ProjectReference Include="..\..\Exchange.Authorization.Context\Exchange.Authorization.Context.csproj" />
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\Exchange.Authorization.Context\Exchange.Authorization.Context.csproj" />
-      <ProjectReference Include="..\..\Exchange.Authorization.Entities\Exchange.Authorization.Entities.csproj" />
+      <Folder Include="Migrations\" />
     </ItemGroup>
     
 </Project>

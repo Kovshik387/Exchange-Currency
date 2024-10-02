@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Exchange.Authorization.Context.Context;
 
-public class AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options) : DbContext(options)
+public class AuthorizationDbContext : DbContext
 {
+    public AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options) : base(options) {}
     public virtual DbSet<Account> Accounts { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 

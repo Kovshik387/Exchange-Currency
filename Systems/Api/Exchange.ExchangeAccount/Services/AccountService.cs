@@ -12,7 +12,7 @@ public class AccountService : AccountServiceProto.Account.AccountBase
     private readonly ILogger _logger;
     private readonly IAccountService _accountService;
 
-    private AccountService(IMapper mapper, ILogger<AccountService> logger, IAccountService accountService)
+    public AccountService(IMapper mapper, ILogger<AccountService> logger, IAccountService accountService)
     {
         _mapper = mapper; _logger = logger;
         _accountService = accountService;
