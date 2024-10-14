@@ -1,4 +1,5 @@
-﻿using Exchange.Services.Account.Data.DTO;
+﻿using AccountServiceProto;
+using Exchange.Services.Account.Data.DTO;
 using Exchange.Services.Account.Infrastructure;
 using Exchange.Services.Settings.SettingsConfigure;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,22 @@ public class AccountController : Controller
     public AccountController(IAccountService accountService, ILogger<AccountController> logger, ApiKeySettings settings) 
         => (_accountService,_logger,_settings) = (accountService,logger,settings);
 
+    [HttpPost]
+    
+    [Route("/api/new")]
+    public async Task<IActionResult> CreateAccount(AccountDto request)
+    {
+        if (!Request.Headers.TryGetValue("secret", out var key)) return Unauthorized("Header not found.");
+        
+        var result = await _accountService.AddAccountAsync(request);
+        _logger.LogInformation($"Add new account: {result.Data}");
+        return Ok(new AccountResponse()
+        {
+            Success = result.Data,
+            ErrorMessage = result.ErrorMessage,
+        });
+    }
+    
     [HttpGet]
     [Route("/api/account/{id}")]
     public async Task<IActionResult> GetAccountDetailsById(string id)

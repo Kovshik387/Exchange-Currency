@@ -7,7 +7,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { AppDispatch, RootState } from "./../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setAuth, setLoggout } from './../store/account.Slice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const fetchCurrencyData = async () => {
     if (localStorage.getItem("dollar") == null ||
@@ -32,13 +32,14 @@ const fetchCurrencyData = async () => {
 }
 
 export default function Header() {
-    const username = useSelector((state: RootState) => state.account.username);
     const isLoggedIn = useSelector((state: RootState) => state.account.isLoggedIn);
     const dispatch = useDispatch<AppDispatch>();
+    const navigator = useNavigate();
 
     const handleLogout = async () => {
         dispatch(logout());
         dispatch(setLoggout(false));
+        navigator('/');
     };
 
     useEffect(() => {
@@ -84,9 +85,9 @@ export default function Header() {
                                 :
                                 <>
                                     <Navbar.Collapse className="me-auto">
-                                        <Navbar.Text>
+                                        {/* <Navbar.Text>
                                             Привет! {username} |
-                                        </Navbar.Text>
+                                        </Navbar.Text> */}
                                         <Nav.Link as={Link} to={`/p/${localStorage.getItem("id")}`}>Профиль</Nav.Link>
                                         <Nav.Link onClick={handleLogout}>Выйти</Nav.Link>
                                     </Navbar.Collapse>

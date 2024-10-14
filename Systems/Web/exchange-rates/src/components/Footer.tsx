@@ -6,7 +6,7 @@ export default function Footer() {
             <Container>
                 <Row>
                     <Col className="text-center">
-                        <p>© 2024 DSR Company. All Rights Reserved.</p>
+                        <p>© 2024-2025 Fantokin. All Rights Reserved.</p>
                     </Col>
                 </Row>
             </Container>

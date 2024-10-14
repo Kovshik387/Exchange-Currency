@@ -1,4 +1,6 @@
-﻿using AccountServiceProto;
+﻿using System.Diagnostics;
+using System.Net.Http.Json;
+using AccountServiceProto;
 using Exchange.Authorization.Context.Context;
 using Exchange.Authorization.Entities;
 using Exchange.Services.Authorization.Data.DTO;
@@ -21,12 +23,13 @@ public class AuthorizationService : IAuthorizationService
     private readonly IJwtUtils _jwtUtils;
     private readonly ApiEndPointSettings _endPointSettings;
     private readonly ILogger<AuthorizationService> _logger;
+    private readonly ApiKeySettings _settings;
     public AuthorizationService(IValidator<SignInDto> signInValidator, IValidator<SignUpDto> signUpValidator,
-        AuthorizationDbContext context, IJwtUtils jwtUtils, ILogger<AuthorizationService> logger, ApiEndPointSettings endPointSettings)
+        AuthorizationDbContext context, IJwtUtils jwtUtils, ILogger<AuthorizationService> logger, ApiEndPointSettings endPointSettings, ApiKeySettings settings)
     {
         _signInValidator = signInValidator; _signUpValidator = signUpValidator;
         _context = context; _jwtUtils = jwtUtils; _endPointSettings = endPointSettings;
-        _logger = logger;
+        _settings = settings; _logger = logger;
     }
     
     public async Task<bool> IsEmptyAsync()
@@ -126,20 +129,22 @@ public class AuthorizationService : IAuthorizationService
             EmailNormalized = model.Email.ToUpper(),
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password, 10),
         };
-        
-        using var channel = GrpcChannel.ForAddress(_endPointSettings.GrpcServerPath);
-        var client = new AccountServiceProto.Account.AccountClient(channel);
-        
-        var response = await client.AddAccountAsync(new AccountRequest()
+
+        using var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add("secret", _settings.XAPIKEY);
+        var request = await httpClient.PostAsync(_endPointSettings.EndpointPath + "/api/new", 
+            JsonContent.Create( new AccountRequest()
         {
             Id = userGuid.ToString(),
             Email = model.Email,
             Name = model.Name,
             Patronymic = model.Patronymic,
             Surname =  model.Surname,
-        });
+        }));
+        
+        var response = await request.Content.ReadFromJsonAsync<AccountResponse>();
 
-        if (!response.Success)
+        if (response == null || !response.Success)
         {
             return new AuthResponse<AuthDto>()
             {

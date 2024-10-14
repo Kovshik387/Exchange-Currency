@@ -9,5 +9,6 @@ namespace Exchange.Services.Settings.SettingsConfigure
     public class ApiEndPointSettings
     {
         public string GrpcServerPath { get; set; } = default!;
+        public string EndpointPath { get; set; } = default!;
     }
 }
