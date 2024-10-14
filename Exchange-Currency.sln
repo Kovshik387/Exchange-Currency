@@ -74,19 +74,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.ExchangeEmail", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Services.MessageSendler", "Services\Exchange.Services.MessageSendler\Exchange.Services.MessageSendler.csproj", "{D161C8EB-94AE-4F2D-84F2-44F1CB78F35D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.ExchangeAuth", "Systems\Api\Exchange.ExchangeAuth\Exchange.ExchangeAuth.csproj", "{BBF769C4-87DD-4CCE-9F96-4D6565065355}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.ExchangeAuth", "Systems\Api\Exchange.ExchangeAuth\Exchange.ExchangeAuth.csproj", "{BBF769C4-87DD-4CCE-9F96-4D6565065355}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authorization", "Authorization", "{9E258007-815B-420C-A111-51B8FF05B90A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{F5DE732E-F987-4E05-AC4D-9D0421335959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.Authorization.Entities", "Data\Authorization\Exchange.Authorization.Entities\Exchange.Authorization.Entities.csproj", "{14FA8CCB-CCBA-4DFA-9937-195FE7127C5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Authorization.Entities", "Data\Authorization\Exchange.Authorization.Entities\Exchange.Authorization.Entities.csproj", "{14FA8CCB-CCBA-4DFA-9937-195FE7127C5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.Authorization.Context.Migrations.PgSql", "Data\Authorization\Migrations\Exchange.Authorization.Context.Migrations.PgSql\Exchange.Authorization.Context.Migrations.PgSql.csproj", "{BA4E5EBB-AABD-4CB7-9E50-D0972F484009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Authorization.Context.Migrations.PgSql", "Data\Authorization\Migrations\Exchange.Authorization.Context.Migrations.PgSql\Exchange.Authorization.Context.Migrations.PgSql.csproj", "{BA4E5EBB-AABD-4CB7-9E50-D0972F484009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.Authorization.Context", "Data\Authorization\Exchange.Authorization.Context\Exchange.Authorization.Context.csproj", "{4116129B-9236-45D0-8780-4F4FF3D19F6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Authorization.Context", "Data\Authorization\Exchange.Authorization.Context\Exchange.Authorization.Context.csproj", "{4116129B-9236-45D0-8780-4F4FF3D19F6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.Services.StorageService", "Services\Exchange.Services.StorageService\Exchange.Services.StorageService.csproj", "{5A56187E-FCBD-4342-ACB1-F0FD9F10A1E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange.Services.Storage", "Services\Exchange.Services.Storage\Exchange.Services.Storage.csproj", "{4AE0A5C1-9774-405F-861A-6FF64F158E75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchange.ExchangeStorage", "Systems\Api\Exchange.ExchangeStorage\Exchange.ExchangeStorage.csproj", "{DB4CE3E5-FB01-41AA-985D-4946C4FD020B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -202,10 +204,14 @@ Global
 		{4116129B-9236-45D0-8780-4F4FF3D19F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4116129B-9236-45D0-8780-4F4FF3D19F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4116129B-9236-45D0-8780-4F4FF3D19F6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A56187E-FCBD-4342-ACB1-F0FD9F10A1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A56187E-FCBD-4342-ACB1-F0FD9F10A1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A56187E-FCBD-4342-ACB1-F0FD9F10A1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A56187E-FCBD-4342-ACB1-F0FD9F10A1E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE0A5C1-9774-405F-861A-6FF64F158E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE0A5C1-9774-405F-861A-6FF64F158E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE0A5C1-9774-405F-861A-6FF64F158E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE0A5C1-9774-405F-861A-6FF64F158E75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB4CE3E5-FB01-41AA-985D-4946C4FD020B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4CE3E5-FB01-41AA-985D-4946C4FD020B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4CE3E5-FB01-41AA-985D-4946C4FD020B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4CE3E5-FB01-41AA-985D-4946C4FD020B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,7 +252,8 @@ Global
 		{14FA8CCB-CCBA-4DFA-9937-195FE7127C5F} = {9E258007-815B-420C-A111-51B8FF05B90A}
 		{BA4E5EBB-AABD-4CB7-9E50-D0972F484009} = {F5DE732E-F987-4E05-AC4D-9D0421335959}
 		{4116129B-9236-45D0-8780-4F4FF3D19F6E} = {9E258007-815B-420C-A111-51B8FF05B90A}
-		{5A56187E-FCBD-4342-ACB1-F0FD9F10A1E8} = {CE66D453-12EC-491A-A4B9-573449FA51D6}
+		{4AE0A5C1-9774-405F-861A-6FF64F158E75} = {CE66D453-12EC-491A-A4B9-573449FA51D6}
+		{DB4CE3E5-FB01-41AA-985D-4946C4FD020B} = {23018298-DD9D-4C61-AFFC-34AB4A7C57E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB24B7B9-B505-47C8-AB41-C98FA9CC9E5E}
