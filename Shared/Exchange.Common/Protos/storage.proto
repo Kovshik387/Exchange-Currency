@@ -24,7 +24,7 @@ message StorageResponse {
   string errorMessage = 3;
 }
 
-service StorageSerive{
+service StorageService{
     rpc UploadImage(UploadImageRequest) returns (StorageResponse); 
     rpc DeleteImage(DeleteImageRequest) returns (StorageResponse);
     rpc GetImage(GetImageRequest) returns (StorageResponse);
