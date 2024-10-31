@@ -10,6 +10,7 @@ export interface Account {
     patronymic: string;
     email: string;
     accept: boolean;
+    url: string;
     favorites: Favorite[];
 }
 
