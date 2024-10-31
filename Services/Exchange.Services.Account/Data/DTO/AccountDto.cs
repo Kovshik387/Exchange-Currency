@@ -12,6 +12,7 @@ public class AccountDto
 
     public string Email { get; set; } = null!;
     public bool Accept { get; set; }
+    public string Url { get; set; } = null!;
 
     public ICollection<FavoriteDto> Favorites { get; set; } = null!;
 }

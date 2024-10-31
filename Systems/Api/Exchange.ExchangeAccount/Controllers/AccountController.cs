@@ -17,7 +17,6 @@ public class AccountController : Controller
         => (_accountService,_logger,_settings) = (accountService,logger,settings);
 
     [HttpPost]
-    
     [Route("/api/new")]
     public async Task<IActionResult> CreateAccount(AccountDto request)
     {
@@ -47,6 +46,23 @@ public class AccountController : Controller
         }
     }
 
+    [HttpPost]
+    [Authorize]
+    [Route("/api/account/upload-image")]
+    public async Task<IActionResult> UploadImage([FromQuery]string id,[FromForm] IFormFile file)
+    {
+        if (file.Length == 0)
+        {
+            _logger.LogError("File is null or empty");
+            return BadRequest("File is missing or empty");
+        }
+        
+        _logger.LogInformation($"Upload image: {file.FileName}");
+        _logger.LogInformation($"Upload type: {file.ContentType}");
+        _logger.LogInformation($"Id: {id}");
+        return Ok(await _accountService.UploadImageAsync(id, file));
+    }
+    
     [HttpPost]
     [Authorize]
     [Route("add-volute")]

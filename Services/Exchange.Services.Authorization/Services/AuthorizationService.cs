@@ -192,9 +192,9 @@ public class AuthorizationService : IAuthorizationService
 
     public async Task<AuthResponse<AuthDto>> GetAccessTokenAsync(string refreshToken)
     {
-        if (DateTime.Now > DateTime.Parse(_jwtUtils.GetExpireTime(refreshToken) ?? string.Empty))
+        this._logger.LogInformation(_jwtUtils.GetExpireTime(refreshToken));
+        if (DateTime.UtcNow > DateTimeOffset.FromUnixTimeSeconds(long.Parse(_jwtUtils.GetExpireTime(refreshToken) ?? string.Empty)).UtcDateTime)
         {
-            this._logger.LogInformation(_jwtUtils.GetExpireTime(refreshToken));
             
             this._logger.LogInformation($"Токен просрочен: {refreshToken} | now {DateTime.Now}");
 
