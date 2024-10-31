@@ -1,9 +1,10 @@
-﻿using Exchange.Services.StorageService.Infrastructure;
+﻿using Exchange.Services.Storage.Data.Responses;
+using Exchange.Services.Storage.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 
-namespace Exchange.Services.StorageService.Services;
+namespace Exchange.Services.Storage.Services;
 
 public class StorageService : IStorageService
 {
@@ -16,7 +17,7 @@ public class StorageService : IStorageService
         _minioClientFactory = minioClientFactory;
     }
     
-    public async Task<bool> AddProfilePhotoAsync(string userId, byte[] photo, string format)
+    public async Task<StorageResponse> AddProfilePhotoAsync(string userId, byte[] photo, string format)
     {
         try
         {
@@ -31,14 +32,16 @@ public class StorageService : IStorageService
             }
             else
             {
-                var existFile = minioClient.RemoveObjectsAsync(new RemoveObjectsArgs()
+                _logger.LogInformation($"Remove old object {userId}");
+                await minioClient.RemoveObjectAsync(new RemoveObjectArgs()
                     .WithBucket(userId)
-                    .WithObject(userId));
+                    .WithObject(userId)
+                );
             }
 
             var putObjectArgs = new PutObjectArgs()
                     .WithBucket(userId)
-                    .WithStreamData(null)
+                    .WithStreamData(new MemoryStream(photo))
                     .WithObject(userId)
                     .WithContentType(format)
                     .WithObjectSize(photo.Length)
@@ -46,29 +49,44 @@ public class StorageService : IStorageService
         
             await minioClient.PutObjectAsync(putObjectArgs);
         
-            return true;
+            return new StorageResponse()
+            {
+                Success = true,
+                Url = await this.GetProfilePhotoAsync(userId)
+            };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return false;
+            return new StorageResponse()
+            {
+                Success = false,
+                ErrorMessage = $"An error occurred when creating profile photo: {ex.Message}"
+            };
         }
     }
     //TODO Custom exception
-    public async Task<bool> DeleteProfilePhotoAsync(string userId)
+    public async Task<StorageResponse> DeleteProfilePhotoAsync(string userId)
     {
         using var minioClient = _minioClientFactory.CreateClient();
 
         if (!await minioClient.BucketExistsAsync(new BucketExistsArgs()
                 .WithBucket(userId)))
         {
-            throw new Exception($"Bucket: {userId} not exist");
+            return new StorageResponse()
+            {
+                Success = false,
+                ErrorMessage = "Bucket does not exist"
+            };
         }
 
         await minioClient.RemoveObjectsAsync(new RemoveObjectsArgs()
                     .WithBucket(userId)
                     .WithObject(userId));
-        return true;
+        return new StorageResponse()
+        {
+            Success = true
+        };
     }
 
     public async Task<string> GetProfilePhotoAsync(string userId)
@@ -82,7 +100,7 @@ public class StorageService : IStorageService
         var args = new PresignedGetObjectArgs()
                 .WithBucket(userId)
                 .WithObject(userId)
-                .WithExpiry(60 * 60)
+                .WithExpiry(60 * 60 * 60)
             ;
         
         return await minioClient.PresignedGetObjectAsync(args);
